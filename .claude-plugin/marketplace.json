@@ -1,0 +1,31 @@
+{
+  "name": "dev-pipe-marketplace",
+  "owner": {
+    "name": "Your Team",
+    "email": "your-team@example.com"
+  },
+  "metadata": {
+    "description": "游戏研发 AI 工作流系统，提供需求管理、技术设计、代码实现、Bug 修复、经验沉淀的完整流程。"
+  },
+  "plugins": [
+    {
+      "name": "dev-pipe",
+      "source": "./",
+      "description": "游戏研发 AI 工作流系统。提供需求管理、技术设计、代码实现、Bug 修复、经验沉淀的完整流程。",
+      "version": "1.0.0",
+      "author": {
+        "name": "Your Team"
+      },
+      "license": "MIT",
+      "keywords": [
+        "game-dev",
+        "workflow",
+        "requirements",
+        "design",
+        "implementation",
+        "experience"
+      ],
+      "category": "productivity"
+    }
+  ]
+}
