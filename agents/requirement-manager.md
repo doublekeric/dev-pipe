@@ -32,8 +32,8 @@ new → analyzing → specified → (handoff to design-manager)
 ### Phase 2: Analyzing
 
 1. Invoke `load-context` (read project overview, related systems)
-2. Invoke `experience-index` (retrieve related experiences)
-3. Invoke `req-create` skill
+2. Invoke `index-experience` (retrieve related experiences)
+3. Invoke `create-req` skill
 4. Output requirements analysis
 5. Wait for user confirmation
 
@@ -62,9 +62,9 @@ new → analyzing → specified → (handoff to design-manager)
 
 | Skill | When |
 |-------|------|
-| experience-index | At start of analyzing |
-| req-create | During analyzing |
-| req-change | When user requests changes |
+| index-experience | At start of analyzing |
+| create-req | During analyzing |
+| change-req | When user requests changes |
 
 ## Output Format
 
@@ -79,7 +79,7 @@ new → analyzing → specified → (handoff to design-manager)
 - {experience doc}
 
 📝 Requirements:
-{generated requirements from req-create}
+{generated requirements from create-req}
 
 ---
 Review requirements. Confirm to proceed to design phase?

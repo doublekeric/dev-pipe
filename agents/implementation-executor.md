@@ -7,7 +7,7 @@ description: "Executes code implementation. Activates when design is confirmed. 
 
 ## Responsibility
 
-Execute implementation based on approved design: write code, run tests, and transition to completion.
+Execute implementation based on approved design: write code, verify changes, and transition to completion.
 
 ## Trigger
 
@@ -18,7 +18,7 @@ Execute implementation based on approved design: write code, run tests, and tran
 ## Phases
 
 ```
-designed → implementing → implemented → (handoff to completion)
+designed → implementing → implemented → completed
 ```
 
 ## Workflow
@@ -26,9 +26,9 @@ designed → implementing → implemented → (handoff to completion)
 ### Phase 1: Implementing
 
 1. Read design from `.dev-pipe/workspace/{task-id}/design.md`
-2. Invoke `experience-index` with implementation keywords
+2. Invoke `index-experience` with implementation keywords
 3. Load code style guidelines
-4. Invoke `design-implementation` skill
+4. Invoke `implement-design` skill
 5. Implement step by step
 6. Each step: show code, wait for confirmation
 7. Update notes.md with progress
@@ -37,8 +37,9 @@ designed → implementing → implemented → (handoff to completion)
 
 1. All implementation steps complete
 2. Update status.md to "implemented"
-3. Invoke `run-tests` (placeholder for future skill)
-4. If tests pass → invoke `code-commit`
+3. Verify changes work correctly
+4. Invoke `commit-code` skill
+5. After commit → invoke `complete-requirement`
 
 ## Implementation Notes
 
@@ -63,9 +64,10 @@ designed → implementing → implemented → (handoff to completion)
 
 | Skill | When |
 |-------|------|
-| experience-index | At start of implementing |
-| design-implementation | During implementing |
-| code-commit | After implementation complete |
+| index-experience | At start of implementing |
+| implement-design | During implementing |
+| commit-code | After implementation complete |
+| complete-requirement | After code committed |
 
 ## Output Format
 
@@ -91,6 +93,8 @@ When implementation complete:
 Phase: implemented
 Files modified: {count}
 
-Run tests?
-[run tests] [skip to commit]
+Proceed to commit and completion?
+[confirm]
 ```
+
+After commit, invoke `complete-requirement` to finalize the task.

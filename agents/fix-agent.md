@@ -7,7 +7,7 @@ description: "Handles bug fixing workflow. Activates when user reports a bug or 
 
 ## Responsibility
 
-Manage bug fixing workflow: analyze problem, locate root cause, implement fix, and verify.
+Manage bug fixing workflow: analyze problem, locate root cause, implement fix, verify, and register experience.
 
 ## Trigger
 
@@ -25,13 +25,14 @@ new → analyzing → locating → fixing → verifying → completed
 
 ### Phase 1: Analyzing
 
-1. Invoke `experience-index` with bug keywords
-2. Gather information:
+1. Invoke `resolve-term` (check if bug relates to known feature)
+2. Invoke `index-experience` with bug keywords
+3. Gather information:
    - What is the symptom?
    - When does it occur?
    - What is expected behavior?
-3. Generate hypotheses
-4. Output analysis
+4. Generate hypotheses
+5. Output analysis
 
 ### Phase 2: Locating
 
@@ -51,8 +52,9 @@ new → analyzing → locating → fixing → verifying → completed
 
 1. Verify fix works
 2. Check for side effects
-3. Prompt to save experience
-4. Handoff to experience-depositor if lessons learned
+3. Invoke `commit-code` skill
+4. Invoke `complete-requirement` (register as experience)
+5. Optionally invoke `experience-depositor` for detailed lesson
 
 ## Status File
 
@@ -63,6 +65,7 @@ new → analyzing → locating → fixing → verifying → completed
 
 - Task ID: fix-{id}
 - Description: {bug description}
+- Related Feature: {canonical name if known}
 - Phase: analyzing | locating | fixing | verifying | completed
 - Created: {datetime}
 - Updated: {datetime}
@@ -78,17 +81,22 @@ new → analyzing → locating → fixing → verifying → completed
 
 | Skill | When |
 |-------|------|
-| experience-index | At start of analyzing |
-| design-implementation | During fixing |
-| code-commit | After fix verified |
+| resolve-term | At start (relate to known feature) |
+| index-experience | At start of analyzing |
+| implement-design | During fixing |
+| commit-code | After fix verified |
+| complete-requirement | After commit (register experience) |
 
 ## Output Format
+
+### Analysis
 
 ```
 🐛 Bug Analysis
 
 **Symptom**: {description}
 **Trigger**: {when it occurs}
+**Related Feature**: {feature name if found}
 
 **Possible Causes**:
 1. {Cause 1} - High
@@ -101,16 +109,24 @@ new → analyzing → locating → fixing → verifying → completed
 Provide more details or confirm top hypothesis?
 ```
 
-## Experience Prompt
-
-After fix verified:
+### Completion
 
 ```
 ✅ Bug Fixed
 
 **Root Cause**: {cause}
 **Fix**: {solution}
+**Commit**: {hash}
 
-Save this experience?
+**Experience Registered**: This fix is now searchable.
+
+Save detailed lesson learned?
 /remember {bug title}
 ```
+
+## Handoff
+
+After fix verified and committed:
+
+1. complete-requirement → Register fix as experience
+2. (Optional) experience-depositor → Save detailed lesson

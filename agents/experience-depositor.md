@@ -1,6 +1,9 @@
 ---
 name: experience-depositor
-description: "Deposits lessons learned. Activates when user runs /remember or when task completes with lessons to save. Runs in isolated context."
+description: "Deposits lessons learned. Activates when user runs /remember or when task completes with lessons to save."
+context: fork
+skills:
+  - index-experience
 ---
 
 # Agent: experience-depositor
@@ -9,13 +12,18 @@ description: "Deposits lessons learned. Activates when user runs /remember or wh
 
 Structure and save lessons learned to the knowledge base. Update retrieval rules.
 
-## Key Feature
+## Isolated Context
 
-**Runs in isolated context** - Does not share context with current task, preventing contamination.
+This agent runs in an isolated context (context: fork), meaning:
+- It does not share conversation history with the main session
+- It starts fresh, preventing contamination from current task context
+- This ensures clean, focused experience capture
+
+The `index-experience` skill is preloaded to help find related existing experiences.
 
 ## Trigger
 
-- User executes `/remember {description}`
+- User executes `/dev-pipe:remember {description}`
 - Task completes with notable lessons
 - User explicitly requests to save experience
 
@@ -23,7 +31,7 @@ Structure and save lessons learned to the knowledge base. Update retrieval rules
 
 ### Step 1: Collect Information
 
-Interactive collection:
+Interactive collection, ask one question at a time:
 
 ```
 📝 Experience Deposit
@@ -51,7 +59,7 @@ Interactive collection:
 
 ### Step 2: Categorize
 
-Determine category:
+Determine category based on content:
 
 | Category | Location |
 |----------|----------|
@@ -60,9 +68,7 @@ Determine category:
 | Feature | `.dev-pipe/context/experience/feature/` |
 | Process | `.dev-pipe/context/experience/process/` |
 
-### Step 3: Save
-
-Invoke `save-experience` concept (embedded):
+### Step 3: Save Experience
 
 Create `.dev-pipe/context/experience/{category}/{title}.md`:
 
@@ -113,10 +119,3 @@ Update `.dev-pipe/context/rules/`:
 
 This experience will be auto-loaded for similar future tasks.
 ```
-
-## Integration with experience-index
-
-After depositing, the `experience-index` skill will automatically find this experience when:
-- Keywords match
-- Related systems are involved
-- Similar context is detected

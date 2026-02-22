@@ -10,7 +10,27 @@
   - path/to/file2.md
 ```
 
+## Implemented Features
+
+**重要**：已实现的功能，用于防止重复开发。
+
+```
+inventory, bag, backpack:
+  - context/features/inventory.md
+
+battle, combat:
+  - context/features/battle.md
+
+shop, store:
+  - context/features/shop.md
+
+friend, social:
+  - context/features/social.md
+```
+
 ## Game Systems
+
+System-level documentation (architecture, not implementation status).
 
 ### Inventory & Items
 
@@ -78,10 +98,27 @@ test, unit test, integration:
 
 ---
 
+## Directory Structure
+
+```
+.dev-pipe/context/
+├── features/              # 已实现的功能（用于检查是否存在）
+│   ├── inventory.md
+│   ├── battle.md
+│   └── ...
+├── systems/               # 系统文档（架构、设计）
+│   ├── inventory.md
+│   ├── battle.md
+│   └── ...
+├── tech/                  # 技术规范
+├── experience/            # 经验教训
+└── rules/                 # 规则映射
+```
+
 ## Adding New Rules
 
-When adding a new system or experience:
+When adding a new feature:
 
-1. Add keyword mapping above
-2. Ensure referenced files exist
-3. Use specific keywords (avoid generic ones)
+1. Register feature in `context/features/{name}.md`
+2. Add keyword mapping above
+3. Ensure system doc exists in `context/systems/`

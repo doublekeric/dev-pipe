@@ -1,13 +1,13 @@
 ---
 name: phase-router
-description: "Intent recognition and phase routing. Activates when user starts any task with /pipe command. Determines task type (feature/bug/continue) and routes to appropriate agent."
+description: "Intent recognition and phase routing. Activates when user starts any task with /pipe command. Determines task type (feature/bug/change/continue) and routes to appropriate agent."
 ---
 
 # Agent: phase-router
 
 ## Responsibility
 
-Intent recognition, phase detection, and routing to appropriate agent.
+Intent recognition, term resolution, feature existence check, phase detection, and routing to appropriate agent.
 
 ## Trigger
 
@@ -16,21 +16,43 @@ Intent recognition, phase detection, and routing to appropriate agent.
 
 ## Pre-flight Check
 
-### DevPipe Initialization Check
-
-Before any routing:
+### Step 1: Check Initialization
 
 ```
 1. Check if .dev-pipe/ exists
 2. Check if .dev-pipe/context/project/overview.md exists
-3. If missing → invoke project-init skill (separate from main skills)
+3. If missing → invoke init-project skill
 4. Wait for initialization to complete
-5. Then continue routing
 ```
 
-## Decision Logic
+### Step 2: Resolve Terms
 
-### Step 1: Check In-Progress Tasks
+Invoke `resolve-term` skill:
+
+```
+User input: "implement item warehouse"
+         ↓
+    resolve-term:
+      - Extract terms: "item warehouse"
+      - Resolve to canonical: "inventory"
+      - Known aliases: bag, backpack, inventory, item warehouse...
+         ↓
+    Use canonical name "inventory" for subsequent search
+```
+
+### Step 3: Check Feature Existence
+
+Invoke `index-feature` skill with canonical name:
+
+```
+If feature found:
+  - Show feature details
+  - Ask: [Modify it] [View details] [Start different feature]
+  - If user chooses "Modify" → route as Change
+  - If user chooses "Start different" → continue with new task
+```
+
+### Step 4: Check In-Progress Tasks
 
 Read `.dev-pipe/workspace/index.md`:
 
@@ -41,51 +63,51 @@ If matching task found:
   - Return: "Continue existing task"
 ```
 
-### Step 2: Classify Task Type
+## Decision Logic
+
+### Classify Task Type
 
 Analyze task description keywords:
 
-| Keywords | Type | Route To |
-|----------|------|----------|
-| 修复, 解决, bug, 问题, 报错, 崩溃, 卡顿 | Bug Fix | fix-agent (external, not in this skill set) |
-| 实现, 开发, 添加, 新增, 创建, 扩展 | New Feature | requirement-manager |
-| 继续, 接着, 恢复 | Continue | Read status, route to current agent |
-| 重构, 优化, 改进 | Improvement | requirement-manager |
+| Keywords | Type | Route To | Reason |
+|----------|------|----------|--------|
+| fix, solve, bug, issue, error, crash, lag | Bug Fix | fix-agent | Existing feature has error |
+| implement, develop, add, create, new, extend | New Feature | requirement-manager | Start from scratch |
+| modify, adjust, change, update, alter | Change | design-manager | Modify existing feature |
+| refactor, optimize, improve | Improvement | design-manager | Optimize existing code |
+| continue, resume, restore | Continue | Read status | Resume in-progress task |
 
-### Step 3: Route to Agent
+### Route to Agent
 
-Based on classification, invoke the appropriate agent:
-
-- **New Feature** → requirement-manager
-- **Continue Task** → Agent based on current phase
-- **Bug Fix** → fix-agent (placeholder for future)
+| Type | Agent | Starting Phase | Pre-checks |
+|------|-------|----------------|------------|
+| New Feature | requirement-manager | analyzing | resolve-term → index-feature |
+| Bug Fix | fix-agent | analyzing | resolve-term |
+| Change | design-manager | designing | - |
+| Improvement | design-manager | designing | - |
+| Continue | (read status) | (current phase) | - |
 
 ## Output Format
 
 ```
 📋 Task Analysis
 
-**Type**: {Feature/Bug/Continue}
-**Status**: {New/In-Progress (Phase: xxx)}
+**Type**: {New Feature / Bug Fix / Change / Improvement / Continue}
+**Term Resolution**: {input} → {canonical}
+**Feature Check**: {Not Found / Found}
+**Status**: {New / In-Progress}
 **Task ID**: {generated-id}
 **Routing to**: {agent-name}
 
 🚀 Invoking {agent-name}...
 ```
 
-## Task ID Generation
-
-```
-Format: {type}-{brief-desc}-{YYYYMMDD}
-Examples:
-  feat-inventory-system-20260221
-  fix-scroll-lag-20260221
-```
-
 ## Context Preparation
 
 Before routing, prepare context:
 
-1. Invoke `experience-index` skill with task keywords
-2. Load `.dev-pipe/context/project/overview.md`
-3. Pass loaded context to target agent
+1. Invoke `resolve-term` skill (normalize terms)
+2. Invoke `index-feature` skill (check if exists)
+3. Invoke `index-experience` skill (load experiences)
+4. Load `.dev-pipe/context/project/overview.md`
+5. Pass loaded context to target agent

@@ -1,6 +1,6 @@
 ---
 name: design-manager
-description: "Manages technical design lifecycle. Activates when requirements are confirmed or when task is in design phase. Handles design creation and changes."
+description: "Manages technical design lifecycle. Activates when requirements are confirmed, when modifying existing features, or when task is in design phase. Handles design creation and changes."
 ---
 
 # Agent: design-manager
@@ -11,24 +11,66 @@ Manage technical design: create architecture, data structures, interfaces, and t
 
 ## Trigger
 
-- Handoff from requirement-manager
+- Handoff from requirement-manager (new feature)
+- Routed from phase-router (change/improvement)
 - User requests design changes
 - Task is in "design" phase
+
+## Entry Points
+
+### Entry A: From requirement-manager
+
+- Requirements already analyzed
+- `.dev-pipe/workspace/{task-id}/spec.md` exists
+- Start directly with design
+
+### Entry B: From phase-router (Change/Improvement)
+
+- No prior requirements doc
+- Modifying existing functionality
+- Need to analyze current implementation first
 
 ## Phases
 
 ```
-specified → designing → designed → (handoff to implementation-executor)
+ Entry A: specified → designing → designed
+ Entry B: new → analyzing → designing → designed
 ```
 
 ## Workflow
 
+### Phase 0: Analyzing (Entry B only)
+
+For changes/improvements without existing spec:
+
+1. Analyze task description to understand what to change
+2. Invoke `index-experience` with change-related keywords
+3. Read existing code that will be modified
+4. Document current behavior and desired behavior
+5. Create mini-spec in `.dev-pipe/workspace/{task-id}/spec.md`:
+   ```markdown
+   # Change Specification
+   
+   ## Current Behavior
+   {How it works now}
+   
+   ## Desired Behavior
+   {How it should work after change}
+   
+   ## Files to Modify
+   - {file 1}
+   - {file 2}
+   
+   ## Constraints
+   - Must maintain backward compatibility with...
+   ```
+
 ### Phase 1: Designing
 
-1. Read requirements from `.dev-pipe/workspace/{task-id}/spec.md`
-2. Invoke `experience-index` with design-related keywords
+1. Read requirements from spec (or mini-spec from Phase 0)
+2. Invoke `index-experience` with design-related keywords
 3. Load tech guidelines from `.dev-pipe/context/tech/`
-4. Invoke `design-create` skill
+4. Invoke `create-design` skill (or `change-design` for modifications)
 5. Output technical design
 6. Wait for user confirmation
 
@@ -48,8 +90,11 @@ specified → designing → designed → (handoff to implementation-executor)
 ## Overview
 {Brief description}
 
-## Architecture
-{Module structure}
+## Current Implementation (for changes)
+{How current code works}
+
+## Changes / New Implementation
+{What will change / new architecture}
 
 ## Data Structures
 {Key data structures}
@@ -71,11 +116,35 @@ specified → designing → designed → (handoff to implementation-executor)
 
 | Skill | When |
 |-------|------|
-| experience-index | At start of designing |
-| design-create | During designing |
-| design-change | When user requests changes |
+| index-experience | At start of analyzing/designing |
+| create-design | During designing (new features) |
+| change-design | During designing (modifications) |
 
 ## Output Format
+
+### For Changes (Entry B)
+
+```
+📐 Analyzing Change: {task description}
+
+**Current Behavior**:
+{How it works now}
+
+**Desired Behavior**:
+{How it should work}
+
+**Files to Modify**:
+- {file 1}
+- {file 2}
+
+**Mini-Spec Created**: .dev-pipe/workspace/{task-id}/spec.md
+
+---
+Proceed to design phase?
+[confirm] [adjust scope]
+```
+
+### For Design
 
 ```
 📐 Technical Design
@@ -88,7 +157,7 @@ specified → designing → designed → (handoff to implementation-executor)
 - {related experiences}
 
 📐 Design:
-{generated design from design-create}
+{generated design}
 
 ---
 Review design. Confirm to proceed to implementation?

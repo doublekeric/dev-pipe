@@ -1,0 +1,13 @@
+# DevPipe
+
+# DevPipe workspace
+.dev-pipe/workspace/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

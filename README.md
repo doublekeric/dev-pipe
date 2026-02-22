@@ -55,11 +55,21 @@ cp -r dev-pipe/commands/* .claude/commands/
 
 首次使用会自动初始化，创建 `.dev-pipe/` 目录。
 
+### 任务类型
+
+| 类型 | 关键词 | 流程 |
+|------|--------|------|
+| 新功能 | 实现、开发、添加、新建 | 需求分析 → 设计 → 实现 |
+| Bug 修复 | 修复、解决、bug、问题 | 问题分析 → 定位 → 修复 |
+| 功能修改 | 修改、调整、变更、改动 | 设计 → 实现（跳过需求分析） |
+| 优化改进 | 重构、优化、改进 | 设计 → 实现 |
+
 ### 日常使用
 
 ```
-/dev-pipe:pipe implement xxx      # 新功能开发
+/dev-pipe:pipe implement xxx      # 新功能
 /dev-pipe:pipe fix xxx            # Bug 修复
+/dev-pipe:pipe modify xxx         # 功能修改
 /dev-pipe:pipe continue xxx       # 继续任务
 /dev-pipe:remember xxx            # 保存经验
 ```
@@ -67,6 +77,8 @@ cp -r dev-pipe/commands/* .claude/commands/
 ## 组件
 
 ### Agents（6个）
+
+> Agent 命名规则：`-er` / `-or` / `-agent` 结尾
 
 | Agent | 职责 |
 |-------|------|
@@ -77,23 +89,29 @@ cp -r dev-pipe/commands/* .claude/commands/
 | fix-agent | Bug 修复 |
 | experience-depositor | 经验沉淀 |
 
-### Skills（13个）
+### Skills（17个）
+
+> Skill 命名规则：动词开头
 
 | Skill | 职责 |
 |-------|------|
-| project-init | 项目初始化 |
-| experience-index | 经验检索 |
-| req-create | 创建需求规格 |
-| req-change | 变更需求规格 |
-| design-create | 创建技术方案 |
-| design-change | 变更技术方案 |
-| workspace-setup | 环境搭建 |
-| design-implementation | 按方案实现 |
-| code-commit | 代码提交 |
-| requirement-completer | 任务完成收尾 |
-| requirement-archiver | 任务归档 |
-| meta-maintainer | 元数据维护 |
-| index-manager | 索引管理 |
+| init-project | 项目初始化 |
+| load-context | 加载项目上下文 |
+| **update-knowledge** | **项目知识积累（结构、环境、检查清单）** |
+| **resolve-term** | **术语解析（解决不同角色表述差异）** |
+| index-feature | 检索已实现功能 |
+| index-experience | 经验检索 |
+| create-req | 创建需求规格 |
+| change-req | 变更需求规格 |
+| create-design | 创建技术方案 |
+| change-design | 变更技术方案 |
+| setup-workspace | 环境搭建 |
+| implement-design | 按方案实现 |
+| commit-code | 代码提交 |
+| complete-requirement | 任务完成收尾（注册功能和术语） |
+| archive-requirement | 任务归档 |
+| maintain-meta | 元数据维护 |
+| manage-index | 索引管理 |
 
 ### Commands（2个）
 
@@ -110,7 +128,7 @@ dev-pipe/
 │   ├── plugin.json          # Plugin 配置
 │   └── marketplace.json     # Marketplace 配置
 ├── agents/                  # 6 个 Agent
-├── skills/                  # 13 个 Skill
+├── skills/                  # 17 个 Skill
 ├── commands/                # 2 个 Command
 └── templates/               # 初始化模板
 
@@ -126,18 +144,79 @@ your-project/.dev-pipe/      # 项目知识库（自动创建）
 
 ## 工作流程
 
-### 功能开发
+### 新功能开发
 
 ```
-需求分析 → 方案设计 → 代码实现 → 验证完成
-    ↓          ↓          ↓          ↓
-req-create  design-create  implement  commit
+/pipe 实现背包系统
+         ↓
+    phase-router
+    ├─ resolve-term: "背包系统" → inventory
+    ├─ index-feature: 检查 inventory 是否存在
+    └─ 不存在 → requirement-manager
+         ↓
+    requirement-manager
+    ├─ load-context: 加载项目上下文
+    ├─ index-experience: 检索相关经验
+    └─ create-req: 生成需求规格
+         ↓
+    design-manager
+    ├─ create-design: 生成技术方案
+    └─ 用户确认
+         ↓
+    implementation-executor
+    ├─ implement-design: 逐步实现
+    ├─ commit-code: 提交代码
+    └─ complete-requirement: 注册功能 + 术语
+         ↓
+    ✅ 功能注册到 context/features/inventory.md
+    ✅ 术语注册到 rules/term-mappings.md
 ```
 
 ### Bug 修复
 
 ```
-问题分析 → 定位根因 → 实施修复 → 验证沉淀
+/pipe 修复背包卡顿
+         ↓
+    phase-router → fix-agent
+         ↓
+    fix-agent
+    ├─ analyzing: 问题分析
+    ├─ locating: 定位根因
+    ├─ fixing: 实施修复
+    └─ verifying: 验证
+         ↓
+    commit-code → complete-requirement
+         ↓
+    ✅ 修复记录可检索
+```
+
+### 功能修改
+
+```
+/pipe 修改背包排序规则
+         ↓
+    phase-router
+    ├─ resolve-term: "背包" → inventory
+    ├─ index-feature: inventory 存在！
+    └─ 识别为 Change → design-manager
+         ↓
+    design-manager (跳过需求分析)
+    ├─ 分析现有实现
+    ├─ change-design: 生成变更方案
+    └─ implementation-executor
+```
+
+### 经验沉淀
+
+```
+/remember 道具数量溢出
+         ↓
+    experience-depositor (独立上下文)
+    ├─ 交互式收集信息
+    ├─ 保存到 context/experience/bug/
+    └─ 更新 rules/
+         ↓
+    ✅ 下次相关问题自动提示
 ```
 
 ## 发布到 GitHub

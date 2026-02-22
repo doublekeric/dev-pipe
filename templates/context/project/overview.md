@@ -1,18 +1,20 @@
-# Project Overview
+# Project Overview Template
 
-> Initialize this file when setting up DevPipe for a new project.
+> 此文件在项目初始化时创建，包含项目基本信息。
+
+---
+
+# {Project Name} Overview
 
 ## Basic Information
 
-- **Project Name**: {Your project name}
-- **Project Type**: {e.g., Card RPG, Casual Game, MMO}
-- **Target Platform**: {iOS / Android / PC / Web}
+- **Project Name**: {name}
+- **Project Type**: {Card RPG / Casual Game / MMO / Other}
+- **Target Platform**: {iOS / Android / PC / Multi-platform}
 - **Game Engine**: {Unity 2021.3 LTS / Unreal 5 / Custom}
 - **Development Stage**: {Prototype / Development / Testing / Live}
 
 ## Core Gameplay Loop
-
-Describe the main gameplay loop:
 
 ```
 {Action 1} → {Action 2} → {Action 3} → {Back to Action 1}
@@ -21,7 +23,9 @@ Example:
 Draw Cards → Build Deck → Battle → Earn Rewards → Draw Cards
 ```
 
-## Technology Stack
+---
+
+## Tech Stack
 
 ### Client
 
@@ -36,46 +40,16 @@ Draw Cards → Build Deck → Battle → Earn Rewards → Draw Cards
 - **Database**: {MySQL, Redis, MongoDB, etc.}
 - **Architecture**: {Microservices, Monolith, etc.}
 
-### Tools
-
-- **Config Format**: {Excel → JSON, Excel → Protobuf, etc.}
-- **Build System**: {Jenkins, GitHub Actions, etc.}
-- **Version Control**: {Git flow, GitHub flow, etc.}
-
-## Directory Structure
-
-```
-Assets/
-├── Scripts/
-│   ├── Core/           # Core framework
-│   ├── Systems/        # Game systems
-│   ├── UI/             # UI logic
-│   └── Utils/          # Utilities
-├── Resources/          # Resource files
-├── Prefabs/            # Prefabs
-└── Art/                # Art assets
-```
-
-## Coding Standards
-
-### Naming
-
-- Classes: PascalCase (`InventoryManager`)
-- Methods: PascalCase (`GetItemCount`)
-- Private fields: _camelCase (`_itemList`)
-- Constants: UPPER_CASE (`MAX_COUNT`)
-
-### Comments
-
-- Use XML documentation for public APIs
-- Explain "why" not "what"
-
-### File Organization
-
-- One class per file
-- File name matches class name
+---
 
 ## Key Contacts
 
 - **Tech Lead**: {Name}
 - **Issues**: {Issue tracker URL}
+
+---
+
+> 以下文件包含更多细节：
+> - **Directory Structure**: `.dev-pipe/context/project/structure.md`
+> - **Environment**: `.dev-pipe/context/project/environment.md`
+> - **Systems**: `.dev-pipe/context/systems/`
