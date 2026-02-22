@@ -14,7 +14,7 @@
 {Describe the performance issue}
 
 - **Symptom**: {Lag, high memory, slow load, etc.}
-- **Platform**: {iOS / Android / All}
+- **Platform(s)**: {e.g. iOS, Android, PC, Web, Server, All}
 - **Scenario**: {When it happens}
 
 ## Metrics

@@ -1,6 +1,6 @@
 # {System Name} System
 
-> Template for documenting a game system.
+> Template for documenting a system (e.g. game system, service module, feature area).
 
 ## Responsibility
 
@@ -34,10 +34,10 @@
 ## Code Location
 
 ```
-Assets/Scripts/Systems/{SystemName}/
-├── {SystemName}Data.cs      # Data structures
-├── {SystemName}Manager.cs   # Manager/Controller
-└── {SystemName}UI.cs        # UI (if applicable)
+{Path to this system's root}/
+├── {Module or file}        # Purpose
+├── {Module or file}        # Purpose
+└── ...                     # (adjust for your project layout)
 ```
 
 ## Dependencies

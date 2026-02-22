@@ -45,7 +45,7 @@ Load relevant tech guidelines from `.dev-pipe/context/tech/`
 📚 Context Loaded
 
 **Project**: {name}
-**Type**: {game type}
+**Type**: {project type or one-line description from overview}
 
 **Related Systems**:
 - {System A}: {brief summary}

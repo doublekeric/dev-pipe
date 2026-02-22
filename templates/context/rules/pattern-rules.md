@@ -76,7 +76,9 @@ spawn, create, instantiate, frequent:
       // ... use object ...
       ObjectPool.Release(obj);
 
-### Unity Components
+### Example: Engine / Client (e.g. Unity)
+
+> Optional. Replace or add sections for your stack (Unreal, Godot, web, etc.).
 
 gameobject, prefab, instantiate:
   - pattern: Prefab Instantiation

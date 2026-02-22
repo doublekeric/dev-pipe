@@ -1,7 +1,6 @@
 # Project Directory Structure
 
-> 此文件描述项目的目录结构，在初始化时创建，后续可更新。
-> 当目录结构变化时，通过 /pipe update-structure 或自动检测更新。
+> Describes the project directory layout. Created at init; update when structure changes (e.g. /pipe update-structure or when AI detects changes).
 
 ---
 
@@ -17,10 +16,9 @@
 
 ```
 {Project Root}/
-├── Assets/              # Unity 资源（如果是 Unity 项目）
-├── Packages/            # 包管理
-├── ProjectSettings/     # 项目设置
-└── .dev-pipe/          # DevPipe 知识库
+├── {src|Assets|app}/    # Main source or assets (e.g. Unity: Assets/; Node: src/; Go: cmd/, internal/)
+├── {packages|Packages}/ # Dependencies (if applicable)
+└── .dev-pipe/          # DevPipe knowledge base
 ```
 
 ---
@@ -83,11 +81,11 @@
 
 ## When to Update
 
-此文件应在以下情况更新：
+Update when:
 
-1. **新增主要目录** - 添加新模块
-2. **目录重构** - 结构调整
-3. **新成员加入** - 帮助理解项目
+1. **New major directories** – new modules or areas.
+2. **Restructure** – layout changes.
+3. **Onboarding** – to help others understand the project.
 
 ### How to Update
 
@@ -95,16 +93,15 @@
 /pipe update-structure
 ```
 
-或让 AI 自动检测：
+Or when AI detects changes:
 
 ```
 💡 Directory Structure Change
 
-检测到新目录：
-- Assets/Scripts/NewModule/
+New directory detected:
+- {path}
 
-是否更新项目结构文档？
-[更新] [跳过]
+Update project structure doc? [Yes] [Skip]
 ```
 
 ---

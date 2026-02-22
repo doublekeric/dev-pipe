@@ -28,21 +28,13 @@ Load `.dev-pipe/workspace/{task-id}/spec.md`
 
 ### Step 2: Load Tech Guidelines
 
-根据项目类型和功能特性，自动加载相关技术规范：
+Load tech guidelines **that exist** under `.dev-pipe/context/tech/` and that match the project context:
 
-```
-.dev-pipe/context/tech/
-├── tech-guidelines.md    # 通用技术栈指南
-├── code-style.md         # 代码风格
-├── frontend.md           # 前端规范（如果项目是前端）
-├── backend.md            # 后端规范（如果项目是后端）
-└── unity.md              # Unity 规范（如果是 Unity 项目）
-```
+- **Always consider**: `tech-guidelines.md`, `code-style.md` (if present).
+- **Conditional**: Load stack- or domain-specific files only when they exist **and** match `.dev-pipe/context/project/overview.md` (e.g. `frontend.md`, `backend.md`, `unity.md`, `unreal.md`). Do not assume every project has Unity or a game engine.
+- **Spec-based**: If the spec mentions UI, screens, or panels → also load frontend-related guidelines if present. If it mentions database, API, or services → load backend-related guidelines if present.
 
-**自动检测**：
-- 如果 spec.md 包含 "UI"、"界面"、"面板" → 加载 frontend.md
-- 如果 spec.md 包含 "数据库"、"API"、"接口" → 加载 backend.md
-- 根据 project/overview.md 中的技术栈配置
+Do not hardcode "Unity" or "game type"; use whatever tech files the project has documented.
 
 ### Step 3: Design Architecture
 
@@ -70,18 +62,18 @@ Load `.dev-pipe/workspace/{task-id}/spec.md`
 
 ### Step 7: Apply Tech Checklist
 
-根据功能类型应用检查清单：
+Apply checklists from the loaded tech guidelines. If the project has custom checklists in `.dev-pipe/context/tech/`, use those. Otherwise, consider these **only when relevant to the spec**:
 
-**如果是 UI 功能**：
-- [ ] UI 层级关系是否清晰？
-- [ ] 是否需要美术资源？
-- [ ] 是否有动效需求？
-- [ ] 是否有音效？
+**If the spec involves UI / frontend / screens**:
+- [ ] UI hierarchy and ownership clear?
+- [ ] Art or asset requirements?
+- [ ] Animation or motion requirements?
+- [ ] Audio or feedback?
 
-**如果是数据功能**：
-- [ ] 数据库表结构是否需要修改？
-- [ ] 是否需要缓存？
-- [ ] 是否需要事务？
+**If the spec involves data / storage / API**:
+- [ ] Schema or table changes needed?
+- [ ] Caching or invalidation?
+- [ ] Transactions or consistency?
 
 ### Step 8: Identify Risks
 
@@ -142,9 +134,9 @@ public interface I{Name} {
 
 ## Tech Stack Considerations
 
-### Frontend (if applicable)
-- UI Resources needed: {list}
-- Animation needs: {description}
+### Frontend / Client (if applicable)
+- Resources needed: {e.g. UI, assets, art}
+- Animation / motion: {description}
 - Performance concerns: {description}
 
 ### Backend (if applicable)
@@ -186,8 +178,7 @@ public interface I{Name} {
 **File**: .dev-pipe/workspace/{task-id}/design.md
 
 **Tech Guidelines Loaded**:
-- frontend.md (UI checklist)
-- unity.md (Performance checklist)
+- {List only the files actually loaded, e.g. tech-guidelines.md, code-style.md, and any stack-specific files present for this project}
 
 **Summary**:
 - Modules: {n}
@@ -206,24 +197,14 @@ Review design and confirm to proceed to implementation.
 
 ### Detection Rules
 
-| If Spec Contains | Load Guidelines |
-|------------------|-----------------|
-| UI, 界面, 面板, Panel | frontend.md |
-| 数据库, Database, API | backend.md |
-| 动画, Animation, 特效 | frontend.md |
-| 网络, Network, 请求 | backend.md |
-| 性能, Performance | tech-guidelines.md |
+| If spec suggests | Load (if file exists) |
+|------------------|------------------------|
+| UI, screens, panels, frontend | frontend.md or similar |
+| Database, API, services, backend | backend.md or similar |
+| Animation, effects, client assets | frontend / client guidelines |
+| Network, requests | backend / API guidelines |
+| Performance | tech-guidelines.md or performance section |
 
-### Project Type Based
+### Context-Based Loading
 
-Read from `.dev-pipe/context/project/overview.md`:
-
-```markdown
-## Tech Stack
-- Frontend: Unity 2021.3
-- Backend: Go
-```
-
-Auto-load:
-- unity.md for frontend tasks
-- backend.md for backend tasks
+Read `.dev-pipe/context/project/overview.md` to see the project’s tech stack. Load only guideline files that **exist** under `.dev-pipe/context/tech/` and match that stack (e.g. if overview says "Go backend", load `backend.md` if present; if "Unity client", load `unity.md` or frontend file if present). Do not assume Unity or a specific engine.

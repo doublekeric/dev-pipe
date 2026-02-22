@@ -1,6 +1,6 @@
 # Project Overview Template
 
-> 此文件在项目初始化时创建，包含项目基本信息。
+> Created at init. Fill from discovery + your answers; omit sections that don't apply.
 
 ---
 
@@ -9,47 +9,41 @@
 ## Basic Information
 
 - **Project Name**: {name}
-- **Project Type**: {Card RPG / Casual Game / MMO / Other}
-- **Target Platform**: {iOS / Android / PC / Multi-platform}
-- **Game Engine**: {Unity 2021.3 LTS / Unreal 5 / Custom}
-- **Development Stage**: {Prototype / Development / Testing / Live}
+- **One-line description**: {e.g. Unity game client / Go backend / Node tool — from init answers or discovery}
+- **Development Stage**: {optional: Prototype / Development / Testing / Live}
 
-## Core Gameplay Loop
+<!-- Optional: only when project is game-related (discovery or user said so) -->
+<!--
+## Game / Product
 
-```
-{Action 1} → {Action 2} → {Action 3} → {Back to Action 1}
-
-Example:
-Draw Cards → Build Deck → Battle → Earn Rewards → Draw Cards
-```
+- **Project Type**: {e.g. MMO, Action, Casual, Other}
+- **Target Platform**: {e.g. iOS, Android, PC, Multi-platform}
+- **Game Engine**: {e.g. Unity 2021.3 LTS, Unreal 5, Custom}
+- **Core loop**: {e.g. Draw → Build → Battle}
+-->
 
 ---
 
 ## Tech Stack
 
-### Client
-
-- **Language**: {C# / C++ / Other}
-- **Frameworks**: {UniRx, DoTween, Addressables, etc.}
-- **Architecture**: {MVC, MVVM, ECS, etc.}
-- **Network**: {WebSocket, HTTP, gRPC, etc.}
-
-### Server
-
-- **Language**: {Go, Java, Node.js, etc.}
-- **Database**: {MySQL, Redis, MongoDB, etc.}
-- **Architecture**: {Microservices, Monolith, etc.}
+<!-- Adjust sections based on discovery: client-only, server-only, or both -->
+- **Primary**: {e.g. Unity 2022, Go 1.21, Node 20}
+- **Language(s)**: {e.g. C#, Go, TypeScript}
+- **Frameworks / key libs**: {e.g. UniRx, Gin, Express}
+- **Architecture**: {e.g. MVC, microservices, monolith}
+- **Database / storage**: {if any}
+- **Network**: {e.g. WebSocket, gRPC, HTTP}
 
 ---
 
 ## Key Contacts
 
-- **Tech Lead**: {Name}
-- **Issues**: {Issue tracker URL}
+- **Tech Lead**: {optional}
+- **Issues**: {optional, issue tracker URL}
 
 ---
 
-> 以下文件包含更多细节：
-> - **Directory Structure**: `.dev-pipe/context/project/structure.md`
+> More detail:
+> - **Directory structure**: `.dev-pipe/context/project/structure.md`
 > - **Environment**: `.dev-pipe/context/project/environment.md`
 > - **Systems**: `.dev-pipe/context/systems/`
