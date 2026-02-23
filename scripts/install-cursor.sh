@@ -45,15 +45,19 @@ install_agents() {
   fi
 }
 
-# 使用 OpenSkills 安装 skills
+# 使用 OpenSkills 安装 skills（用项目内相对路径，避免 Windows 下 C:/ 被误当 GitHub 地址）
 install_skills() {
   local src="$1"
   local dest="$2"
+  local skills_tmp="$dest/.dev-pipe-install/skills"
   if [[ ! -d "$src/skills" ]]; then
     echo "  - 未找到 skills 目录，跳过"
     return
   fi
-  (cd "$dest" && npx --yes openskills install "$src/skills")
+  mkdir -p "$skills_tmp"
+  cp -r "$src/skills/"* "$skills_tmp/" 2>/dev/null || true
+  (cd "$dest" && npx --yes openskills install "./.dev-pipe-install/skills")
+  rm -rf "$dest/.dev-pipe-install"
   (cd "$dest" && npx --yes openskills sync 2>/dev/null) || true
   echo "  - skills 已通过 OpenSkills 安装到 $dest/.claude/skills/"
 }
