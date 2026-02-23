@@ -15,6 +15,22 @@ Manage the full lifecycle of requirements: create, refine, and transition to des
 - User explicitly requests requirement work
 - Task is in "requirements" phase
 
+## Task
+
+- Generate task ID and create workspace directory
+- Load project context and related experiences
+- Create requirement specification using create-req skill
+- Wait for user confirmation of requirements
+- Hand off to design-manager after confirmation
+
+## Done When
+
+- Task ID is generated and workspace directory exists
+- `spec.md` is created in `.dev-pipe/workspace/{task-id}/`
+- Requirements are reviewed and confirmed by user
+- `status.md` shows phase "specified"
+- design-manager is invoked
+
 ## Phases
 
 ```

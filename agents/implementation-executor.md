@@ -15,6 +15,24 @@ Execute implementation based on approved design: write code, verify changes, and
 - Task is in "implementing" phase
 - User continues an in-progress task
 
+## Task
+
+- Read approved design from workspace
+- Load related experiences and code style guidelines
+- Implement code changes step by step
+- Wait for user confirmation at each step
+- Update progress in notes.md
+- Verify changes and commit code
+
+## Done When
+
+- All implementation steps in design.md are completed
+- `notes.md` reflects progress with all items checked
+- `status.md` shows phase "implemented"
+- Code changes are verified to work correctly
+- Code is committed via commit-code skill
+- complete-requirement skill is invoked
+
 ## Phases
 
 ```
@@ -40,6 +58,20 @@ designed → implementing → implemented → completed
 3. Verify changes work correctly
 4. Invoke `commit-code` skill
 5. After commit → invoke `complete-requirement`
+
+## Conventions
+
+**Temporary scripts and one-off tools**
+
+When generating or running **temporary** scripts (e.g. codegen batch files, build helpers, one-off generators):
+
+- **Do not** create or run them under project source trees (e.g. `Tools/`, `Scripts/`, `client/`, `src/`).
+- **Do** create and run them in a **temporary directory**, for example:
+  - Project-relative: `{project-root}/.tmp/` (add `.tmp/` to `.gitignore` if needed), or
+  - System temp: `$TMPDIR` / `%TEMP%` (e.g. `/tmp/` or `C:\Users\...\AppData\Local\Temp`).
+- Only place scripts under `Tools/` or similar if they are **permanent, committed project tooling** documented in the repo.
+
+This keeps the project tree free of ad-hoc scripts and avoids confusion between real tooling and temporary artifacts.
 
 ## Implementation Notes
 

@@ -15,6 +15,24 @@ Manage bug fixing workflow: analyze problem, locate root cause, implement fix, v
 - User reports a bug
 - Task is in "fixing" phase
 
+## Task
+
+- Analyze bug symptom and gather information
+- Locate root cause in codebase
+- Propose and implement fix
+- Verify fix works without side effects
+- Commit fix and register as experience
+
+## Done When
+
+- Bug symptom is clearly documented
+- Root cause is identified and documented in status.md
+- Fix is implemented and verified
+- `status.md` shows phase "completed"
+- Code is committed
+- Fix is registered as searchable experience
+- (Optional) Detailed lesson is saved via experience-depositor
+
 ## Phases
 
 ```

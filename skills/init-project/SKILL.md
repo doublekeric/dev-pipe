@@ -11,9 +11,9 @@ Initialize DevPipe structure for a new project, creating knowledge base and work
 
 ## Trigger
 
-- First use of `/dev-pipe:pipe` in a project
+- First use of DevPipe in a project
 - `.dev-pipe/` directory doesn't exist
-- User runs `/dev-pipe:pipe init`
+- User requests project initialization
 
 ## Process
 
@@ -114,6 +114,9 @@ Append to .gitignore (if exists):
 ```
 # DevPipe
 .dev-pipe/workspace/
+
+# Temporary scripts / one-off tools (run from here, not under Tools/ or src/)
+.tmp/
 ```
 
 ## Output
@@ -134,12 +137,35 @@ Append to .gitignore (if exists):
 🎯 Next Steps:
 1. Review: .dev-pipe/context/project/overview.md
 2. Add system docs as you develop
-3. Start: /dev-pipe:pipe implement {your first feature}
+3. Start: use dev-pipe to implement {your first feature}
 ```
 
 ## Template Files
 
-Read from `templates/` directory. When generating `.dev-pipe/context/project/overview.md`:
+Read templates from either location (try in order):
 
+1. `.claude/templates/` — if installed via install-cursor.sh (Cursor)
+2. `templates/` — if running from Claude Code plugin root
+
+Template files available:
+- `context/project/overview.md` — Project overview template
+- `context/project/structure.md` — Project structure template
+- `context/project/environment.md` — Environment setup template
+- `context/tech/tech-guidelines.md` — Technical guidelines template
+- `context/tech/code-style.md` — Code style template
+- `context/systems/_template.md` — System documentation template
+- `context/features/_template.md` — Feature documentation template
+- `context/rules/context-rules.md` — Context mapping rules
+- `context/rules/risk-rules.md` — Risk warning rules
+- `context/rules/pattern-rules.md` — Pattern rules
+- `context/rules/term-mappings.md` — Term mapping rules
+- `context/experience/bug/_template.md` — Bug experience template
+- `context/experience/performance/_template.md` — Performance experience template
+- `context/experience/feature/_template.md` — Feature experience template
+- `context/experience/process/_template.md` — Process experience template
+- `workspace/index.md` — Workspace index template
+- `workspace/status.md` — Task status template
+
+When generating `.dev-pipe/context/project/overview.md`:
 - **Pre-fill** from discovery (e.g. detected "Unity" → set Game Engine; detected "Go" → set Server language) and from user answers.
 - **Omit or collapse** sections that don't apply (e.g. no "Core Gameplay Loop" for a non-game repo; no "Game Engine" for a backend-only repo). The overview template has optional blocks for this.

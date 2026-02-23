@@ -14,6 +14,22 @@ Intent recognition, term resolution, feature existence check, phase detection, a
 - User executes `/pipe {task description}`
 - Any task initiation
 
+## Task
+
+- Analyze user input to classify task type (feature/bug/change/improvement/continue)
+- Resolve user terms to canonical project names
+- Check if referenced feature already exists
+- Route to appropriate agent (requirement-manager / design-manager / fix-agent)
+- Pass loaded context to target agent
+
+## Done When
+
+- Task type is classified and displayed to user
+- Canonical term is resolved (if applicable)
+- Feature existence check is complete
+- Task is routed to the correct agent
+- `.dev-pipe/workspace/{task-id}/status.md` is initialized
+
 ## Pre-flight Check
 
 ### Step 1: Check Initialization

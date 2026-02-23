@@ -2,9 +2,20 @@
 
 游戏研发 AI 工作流系统，提供需求管理、技术设计、代码实现、Bug 修复、经验沉淀的完整流程。也适用于非游戏项目（后端、工具、SDK 等）；首次初始化会根据项目已有内容提问，空项目则使用普适问题。
 
+**本仓库同时支持 Claude Code 与 Cursor**：同一套 agents、skills、templates 与 `.dev-pipe/` 工作区格式，按你使用的环境选择对应安装方式即可。
+
+| 环境 | 安装方式 | 入口 |
+|------|----------|------|
+| **Claude Code** | Plugin（Marketplace / 本地 plugin-dir / 手动复制） | 自然语言「用 dev-pipe 实现/修复/记…」 |
+| **Cursor** | 一键脚本 | 自然语言「用 dev-pipe 实现/修复/记…」 |
+
+---
+
 ## 安装
 
-### 方式 1：通过 Marketplace 安装（推荐）
+### Claude Code
+
+#### 方式 1：通过 Marketplace 安装（推荐）
 
 1. **注册 Marketplace**
    
@@ -15,7 +26,7 @@
    或使用完整 URL：
    
    ```bash
-   /plugin marketplace add https://github.com/your-org/dev-pipe.git
+   /plugin marketplace add https://github.com/doublekeric/dev-pipe.git
    ```
 
 2. **安装 Plugin**
@@ -24,33 +35,56 @@
    /plugin install dev-pipe@dev-pipe-marketplace
    ```
 
-### 方式 2：本地加载
+#### 方式 2：本地加载
 
 ```bash
-git clone https://github.com/your-org/dev-pipe.git
+git clone https://github.com/doublekeric/dev-pipe.git
 claude --plugin-dir ./dev-pipe
 ```
 
-### 方式 3：手动复制
+#### 方式 3：手动复制
 
 ```bash
 # 复制到用户目录（全局使用）
 cp -r dev-pipe/agents/* ~/.claude/agents/
 cp -r dev-pipe/skills/* ~/.claude/skills/
-cp -r dev-pipe/commands/* ~/.claude/commands/
+cp -r dev-pipe/templates/* ~/.claude/templates/
 
 # 或复制到项目目录
 cp -r dev-pipe/agents/* .claude/agents/
 cp -r dev-pipe/skills/* .claude/skills/
-cp -r dev-pipe/commands/* .claude/commands/
+cp -r dev-pipe/templates/* .claude/templates/
 ```
+
+### Cursor
+
+在**要使用 DevPipe 的项目**根目录执行：
+
+```bash
+bash -c "$(curl -sL https://raw.githubusercontent.com/doublekeric/dev-pipe/main/scripts/install-cursor.sh)"
+```
+
+或先克隆再安装：
+
+```bash
+git clone --depth 1 https://github.com/doublekeric/dev-pipe.git .dev-pipe-tmp
+./.dev-pipe-tmp/scripts/install-cursor.sh
+rm -rf .dev-pipe-tmp
+```
+
+脚本会安装：
+- skills → `.claude/skills/`（通过 OpenSkills）
+- agents → `.cursor/agents/`
+- templates → `.claude/templates/`
+
+使用方式：在对话中说「用 dev-pipe 实现 xxx」「希望修改 xxx」等，同一对话内无需重复「用 dev-pipe」。详见 [docs/cursor-migration-analysis.md](docs/cursor-migration-analysis.md)。
 
 ## 使用
 
 ### 首次使用
 
 ```
-/dev-pipe:pipe implement inventory system
+用 dev-pipe 实现 inventory system
 ```
 
 首次使用会自动初始化，创建 `.dev-pipe/` 目录。
@@ -63,16 +97,21 @@ cp -r dev-pipe/commands/* .claude/commands/
 | Bug 修复 | 修复、解决、bug、问题 | 问题分析 → 定位 → 修复 |
 | 功能修改 | 修改、调整、变更、改动 | 设计 → 实现（跳过需求分析） |
 | 优化改进 | 重构、优化、改进 | 设计 → 实现 |
+| 经验沉淀 | 沉淀、记录、remember、save experience | 收集信息 → 分类存储 |
 
 ### 日常使用
 
 ```
-/dev-pipe:pipe implement xxx      # 新功能
-/dev-pipe:pipe fix xxx            # Bug 修复
-/dev-pipe:pipe modify xxx         # 功能修改
-/dev-pipe:pipe continue xxx       # 继续任务
-/dev-pipe:remember xxx            # 保存经验
+用 dev-pipe 实现 xxx      # 新功能
+用 dev-pipe 修复 xxx      # Bug 修复
+用 dev-pipe 修改 xxx      # 功能修改
+用 dev-pipe 记录 xxx 经验 # 保存经验
+继续实现 xxx              # 继续任务（同一对话内）
 ```
+
+### 约定（实现阶段）
+
+- **临时脚本**：代码生成、一次性批处理等**临时脚本**应在**临时目录**中创建和运行（如项目根下 `.tmp/` 或系统临时目录），不要放在 `Tools/`、`Scripts/` 等源码树下，避免与正式工具混淆。正式工具再放入 `Tools/` 并提交。
 
 ## 组件
 
@@ -89,16 +128,17 @@ cp -r dev-pipe/commands/* .claude/commands/
 | fix-agent | Bug 修复 |
 | experience-depositor | 经验沉淀 |
 
-### Skills（17个）
+### Skills（18个）
 
 > Skill 命名规则：动词开头
 
 | Skill | 职责 |
 |-------|------|
+| **dev-pipe** | **入口 Skill，意图识别与路由** |
 | init-project | 项目初始化 |
 | load-context | 加载项目上下文 |
-| **update-knowledge** | **项目知识积累（结构、环境、检查清单）** |
-| **resolve-term** | **术语解析（解决不同角色表述差异）** |
+| update-knowledge | 项目知识积累（结构、环境、检查清单） |
+| resolve-term | 术语解析（解决不同角色表述差异） |
 | index-feature | 检索已实现功能 |
 | index-experience | 经验检索 |
 | create-req | 创建需求规格 |
@@ -113,13 +153,6 @@ cp -r dev-pipe/commands/* .claude/commands/
 | maintain-meta | 元数据维护 |
 | manage-index | 索引管理 |
 
-### Commands（2个）
-
-| Command | 用途 |
-|---------|------|
-| /dev-pipe:pipe | 开发任务入口 |
-| /dev-pipe:remember | 保存经验 |
-
 ## 项目结构
 
 ```
@@ -128,18 +161,23 @@ dev-pipe/
 │   ├── plugin.json          # Plugin 配置
 │   └── marketplace.json     # Marketplace 配置
 ├── agents/                  # 6 个 Agent
-├── skills/                  # 17 个 Skill
-├── commands/                # 2 个 Command
+├── skills/                  # 18 个 Skill
 └── templates/               # 初始化模板
 
-your-project/.dev-pipe/      # 项目知识库（自动创建）
-├── context/
-│   ├── project/             # 项目概况
-│   ├── systems/             # 系统文档
-│   ├── tech/                # 技术规范
-│   ├── experience/          # 经验沉淀
-│   └── rules/               # 规则映射
-└── workspace/               # 任务状态
+your-project/
+├── .claude/
+│   ├── skills/              # DevPipe skills（安装后）
+│   └── templates/           # DevPipe templates（安装后）
+├── .cursor/
+│   └── agents/              # DevPipe agents（安装后，仅 Cursor）
+└── .dev-pipe/               # 项目知识库（自动创建）
+    ├── context/
+    │   ├── project/         # 项目概况
+    │   ├── systems/         # 系统文档
+    │   ├── tech/            # 技术规范
+    │   ├── experience/      # 经验沉淀
+    │   └── rules/           # 规则映射
+    └── workspace/           # 任务状态
 ```
 
 ## 工作流程
@@ -147,9 +185,9 @@ your-project/.dev-pipe/      # 项目知识库（自动创建）
 ### 新功能开发
 
 ```
-/pipe 实现背包系统
+用 dev-pipe 实现背包系统
          ↓
-    phase-router
+    dev-pipe skill (phase-router logic)
     ├─ resolve-term: "背包系统" → inventory
     ├─ index-feature: 检查 inventory 是否存在
     └─ 不存在 → requirement-manager
@@ -175,9 +213,9 @@ your-project/.dev-pipe/      # 项目知识库（自动创建）
 ### Bug 修复
 
 ```
-/pipe 修复背包卡顿
+用 dev-pipe 修复背包卡顿
          ↓
-    phase-router → fix-agent
+    dev-pipe skill → fix-agent
          ↓
     fix-agent
     ├─ analyzing: 问题分析
@@ -193,9 +231,9 @@ your-project/.dev-pipe/      # 项目知识库（自动创建）
 ### 功能修改
 
 ```
-/pipe 修改背包排序规则
+用 dev-pipe 修改背包排序规则
          ↓
-    phase-router
+    dev-pipe skill (phase-router logic)
     ├─ resolve-term: "背包" → inventory
     ├─ index-feature: inventory 存在！
     └─ 识别为 Change → design-manager
@@ -209,9 +247,9 @@ your-project/.dev-pipe/      # 项目知识库（自动创建）
 ### 经验沉淀
 
 ```
-/remember 道具数量溢出
+用 dev-pipe 记录道具数量溢出经验
          ↓
-    experience-depositor (独立上下文)
+    experience-depositor
     ├─ 交互式收集信息
     ├─ 保存到 context/experience/bug/
     └─ 更新 rules/
@@ -226,7 +264,7 @@ your-project/.dev-pipe/      # 项目知识库（自动创建）
    git init
    git add .
    git commit -m "Initial commit"
-   git remote add origin https://github.com/your-org/dev-pipe.git
+   git remote add origin https://github.com/doublekeric/dev-pipe.git
    git push -u origin main
    ```
 
@@ -248,7 +286,7 @@ your-project/.dev-pipe/      # 项目知识库（自动创建）
   "author": {
     "name": "Your Team Name"
   },
-  "repository": "https://github.com/your-org/dev-pipe"
+  "repository": "https://github.com/doublekeric/dev-pipe"
 }
 ```
 

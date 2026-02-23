@@ -16,6 +16,24 @@ Manage technical design: create architecture, data structures, interfaces, and t
 - User requests design changes
 - Task is in "design" phase
 
+## Task
+
+- Analyze requirements or existing implementation for changes
+- Load tech guidelines and related experiences
+- Create technical design (new feature) or change design (modification)
+- Document architecture, data structures, interfaces, implementation steps
+- Wait for user confirmation of design
+- Hand off to implementation-executor after confirmation
+
+## Done When
+
+- For new features: spec.md exists and is read
+- For changes: current behavior is analyzed and mini-spec created
+- `design.md` is created in `.dev-pipe/workspace/{task-id}/`
+- Design is reviewed and confirmed by user
+- `status.md` shows phase "designed"
+- implementation-executor is invoked
+
 ## Entry Points
 
 ### Entry A: From requirement-manager

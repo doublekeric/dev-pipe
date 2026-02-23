@@ -41,6 +41,16 @@ For each task:
 5. **Save file**
 6. **Update notes.md**
 
+### Conventions: Where to Put Scripts
+
+When the implementation involves **temporary or one-off scripts** (e.g. codegen `.bat`/`.sh`, generators):
+
+- **Do not** create them under project source (e.g. `Tools/`, `Scripts/`, `client/`). That pollutes the repo and blurs the line between real tooling and temporary artifacts.
+- **Do** create and run them in a **temporary directory**, e.g.:
+  - `{project-root}/.tmp/` (ensure `.tmp/` is in `.gitignore`), or
+  - System temp (`$TMPDIR` / `%TEMP%`).
+- Only add scripts to `Tools/` (or similar) if they are **permanent project tooling** and will be committed and documented.
+
 ### Step 4: Handle Issues
 
 If issues arise:

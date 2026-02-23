@@ -23,7 +23,7 @@ Load relevant context files based on task keywords, helping Claude understand th
 if [ -f ".dev-pipe/context/project/overview.md" ]; then
   cat .dev-pipe/context/project/overview.md
 else
-  echo "Project not initialized. Run /dev-pipe:pipe init first."
+  echo "Project not initialized. Use dev-pipe to initialize first."
 fi
 ```
 

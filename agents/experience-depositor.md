@@ -23,9 +23,25 @@ The `index-experience` skill is preloaded to help find related existing experien
 
 ## Trigger
 
-- User executes `/dev-pipe:remember {description}`
+- User says "remember", "save experience", "record lesson"
 - Task completes with notable lessons
 - User explicitly requests to save experience
+
+## Task
+
+- Interactively collect experience details (problem, trigger, cause, solution, prevention)
+- Categorize experience (bug/performance/feature/process)
+- Save structured experience document to knowledge base
+- Update retrieval rules for future discovery
+
+## Done When
+
+- All required information is collected
+- Experience is saved to `.dev-pipe/context/experience/{category}/{title}.md`
+- Keywords are added to context-rules.md
+- Risk warnings added to risk-rules.md (if applicable)
+- Pattern added to pattern-rules.md (if applicable)
+- User receives confirmation with file location and keywords
 
 ## Workflow
 
