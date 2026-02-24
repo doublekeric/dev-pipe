@@ -18,7 +18,7 @@
 {Project Root}/
 ├── {src|Assets|app}/    # Main source or assets (e.g. Unity: Assets/; Node: src/; Go: cmd/, internal/)
 ├── {packages|Packages}/ # Dependencies (if applicable)
-└── .dev-pipe/          # DevPipe knowledge base
+└── .cantrip/          # Cantrip knowledge base
 ```
 
 ---

@@ -1,77 +1,77 @@
 ---
 name: setup-workspace
-description: "Sets up development workspace. Activates when starting implementation to ensure environment is ready."
+description: "搭建开发工作区。在开始实现前激活，确保环境就绪。"
 ---
 
 # Skill: setup-workspace
 
-## Purpose
+## 目的
 
-Verify and prepare the development workspace before implementation begins.
+在实现开始前核对并准备开发工作区。
 
-## Trigger
+## 触发条件
 
-- Before implementation starts
-- User explicitly requests environment check
+- 实现开始之前
+- 用户明确要求检查环境
 
-## Process
+## 流程
 
-### Step 1: Verify Project Structure
+### 步骤 1：核对项目结构
 
-Check required directories exist:
-- `.dev-pipe/workspace/`
-- Source code directories
+确认所需目录存在：
+- `.cantrip/workspace/`
+- 源码目录
 
-### Step 2: Verify Dependencies
+### 步骤 2：核对依赖
 
-Check for:
-- Required packages
-- Build tools
-- Test frameworks
+检查：
+- 所需包
+- 构建工具
+- 测试框架
 
-### Step 3: Verify Configuration
+### 步骤 3：核对配置
 
-Check:
-- Build configuration
-- Test configuration
-- Environment settings
+检查：
+- 构建配置
+- 测试配置
+- 环境设置
 
-### Step 4: Create Task Workspace
+### 步骤 4：创建任务工作区
 
-Create `.dev-pipe/workspace/{task-id}/` if not exists:
+若不存在则创建 `.cantrip/workspace/{task-id}/`：
 - `status.md`
 - `notes.md`
 
-## Output
+## 输出
 
 ```markdown
-🔧 Workspace Setup
+🔧 工作区就绪
 
-**Project Structure**: ✅ Valid
-**Dependencies**: ✅ Installed
-**Configuration**: ✅ Ready
+**项目结构**: ✅ 有效
+**依赖**: ✅ 已安装
+**配置**: ✅ 就绪
 
-**Task Workspace Created**:
-📁 .dev-pipe/workspace/{task-id}/
+**任务工作区已创建**:
+📁 .cantrip/workspace/{task-id}/
 ├── status.md
 └── notes.md
 
-Ready for implementation.
+可以开始实现。
 ```
 
-## Error Handling
+## 异常处理
 
-If issues found:
+若发现问题：
 
 ```markdown
-⚠️ Workspace Issues
+⚠️ 工作区问题
 
-**Missing Dependencies**:
-- {package}: Install with {command}
+**缺失依赖**:
+- {package}: 使用 {command} 安装
 
-**Missing Configuration**:
-- {config}: {how to create}
+**缺失配置**:
+- {config}: {如何创建}
 
-Resolve these before continuing?
-[resolve automatically] [skip] [abort]
+是否在继续前解决？
+[自动解决] [跳过] [中止]
 ```

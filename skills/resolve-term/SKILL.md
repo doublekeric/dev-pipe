@@ -1,220 +1,220 @@
 ---
 name: resolve-term
-description: "Resolves different terms to canonical names using both explicit mappings and AI semantic analysis. Learns new mappings automatically."
+description: "将不同说法解析为规范名称，结合显式映射与 AI 语义分析，并自动学习新映射。"
 ---
 
 # Skill: resolve-term
 
-## Purpose
+## 目的
 
-Translate different terms to canonical feature names using:
-1. **Explicit mappings** - Known aliases in term-mappings.md
-2. **Semantic analysis** - AI judges similarity
-3. **Auto-learning** - Confirmed matches are saved
+将不同说法翻译为规范功能名称，方式包括：
+1. **显式映射** — term-mappings.md 中的已知别名
+2. **语义分析** — AI 判断相似度
+3. **自动学习** — 用户确认的匹配会写入映射
 
-## Trigger
+## 触发条件
 
-- Before index-feature search
-- When user describes a feature
-- Before registering new feature
+- 在 index-feature 检索之前
+- 用户描述某个功能时
+- 在注册新功能之前
 
-## Process
+## 流程
 
-### Step 1: Exact Match
+### 步骤 1：精确匹配
 
-Check `.dev-pipe/context/rules/term-mappings.md`:
-
-```
-Input: "道具仓库"
-Lookup: exact match in aliases
-Result: "inventory" (if found)
-```
-
-If found → return canonical name immediately.
-
-### Step 2: Semantic Analysis (if no exact match)
-
-**AI 自动判断语义相似性**：
+查 `.cantrip/context/rules/term-mappings.md`：
 
 ```
-Input: "道具仓库"
-Explicit match: Not found
-
-AI Analysis:
-- "道具仓库" contains "道具" (item)
-- "道具仓库" implies storage
-- Existing features with similar meaning:
-  - inventory (背包系统) - stores items
-  - shop (商店) - sells items
-- Most likely: inventory (背包系统)
-- Confidence: 85%
+输入：「道具仓库」
+查表：别名是否精确匹配
+结果：「inventory」（若找到）
 ```
 
-### Step 3: Confirm with User
+若找到 → 直接返回规范名。
 
-If confidence > 70%:
+### 步骤 2：语义分析（无精确匹配时）
 
-```
-🔍 Term Resolution
-
-**Input**: 道具仓库
-**Not in mappings**: "道具仓库" is a new term
-
-**AI Guess**: This might be the same as:
-→ inventory (背包系统)
-   Reason: Both refer to item storage
-
-**Confidence**: 85%
-
-Is "道具仓库" the same as "背包系统"?
-[Yes, same feature] [No, different feature]
-```
-
-### Step 4: Auto-Learn
-
-If user confirms:
+**由 AI 自动判断语义相似性**：
 
 ```
-✅ Term Learned
+输入：「道具仓库」
+显式匹配：未找到
 
-"道具仓库" → inventory (背包系统)
-
-Added to .dev-pipe/context/rules/term-mappings.md
-
-Now "道具仓库" will be recognized automatically.
+AI 分析：
+- 「道具仓库」含「道具」（物品）
+- 「道具仓库」表示存储
+- 已有功能中语义相近的：
+  - inventory（背包系统）— 存储物品
+  - shop（商店）— 出售物品
+- 最可能：inventory（背包系统）
+- 置信度：85%
 ```
 
-## Semantic Analysis Logic
+### 步骤 3：与用户确认
 
-### How AI Judges Similarity
-
-| Indicator | Weight | Example |
-|-----------|--------|---------|
-| Shared keywords | High | "背包" and "道具" often relate to inventory |
-| Functional similarity | High | Both "store items" |
-| Context match | Medium | User mentions "add item", "check inventory" |
-| Code reference | High | Mentions "InventoryManager" class |
-
-### Examples
-
-| Input | AI Analysis | Result |
-|-------|-------------|--------|
-| 道具仓库 | storage + items → inventory | inventory (85%) |
-| 商城 | buy + items → shop | shop (90%) |
-| 打架 | combat → battle | battle (80%) |
-| 物品列表 | list + items → inventory UI | inventory (60%) |
-
-### Confidence Thresholds
-
-| Confidence | Action |
-|------------|--------|
-| > 90% | Suggest strongly, ask for confirmation |
-| 70-90% | Suggest, ask for confirmation |
-| 50-70% | List possibilities, let user choose |
-| < 50% | Treat as new feature |
-
-## Output
-
-### Exact Match Found
+若置信度 > 70%：
 
 ```
-🔍 Term Resolution
+🔍 术语解析
 
-**Input**: {user term}
-**Canonical**: {canonical name}
+**输入**：道具仓库
+**未在映射中**：「道具仓库」为新说法
 
-**Known Aliases**:
+**AI 推测**：可能与以下为同一功能：
+→ inventory（背包系统）
+   理由：均指物品存储
+
+**置信度**：85%
+
+「道具仓库」和「背包系统」是同一功能吗？
+[是，同一功能] [否，不同功能]
+```
+
+### 步骤 4：自动学习
+
+若用户确认：
+
+```
+✅ 术语已学习
+
+「道具仓库」→ inventory（背包系统）
+
+已写入 .cantrip/context/rules/term-mappings.md
+
+之后「道具仓库」会被自动识别。
+```
+
+## 语义分析逻辑
+
+### AI 如何判断相似度
+
+| 指标 | 权重 | 示例 |
+|------|------|------|
+| 共有关键词 | 高 | 「背包」与「道具」常与 inventory 相关 |
+| 功能相似 | 高 | 均为「存储物品」 |
+| 上下文匹配 | 中 | 用户提到「添加物品」「查背包」 |
+| 代码引用 | 高 | 提到 InventoryManager 类 |
+
+### 示例
+
+| 输入 | AI 分析 | 结果 |
+|------|---------|------|
+| 道具仓库 | 存储 + 物品 → inventory | inventory (85%) |
+| 商城 | 购买 + 物品 → shop | shop (90%) |
+| 打架 | 战斗 → battle | battle (80%) |
+| 物品列表 | 列表 + 物品 → inventory UI | inventory (60%) |
+
+### 置信度阈值
+
+| 置信度 | 动作 |
+|--------|------|
+| > 90% | 强烈建议，请用户确认 |
+| 70–90% | 建议，请用户确认 |
+| 50–70% | 列出可能项，由用户选择 |
+| < 50% | 视为新功能 |
+
+## 输出
+
+### 精确匹配
+
+```
+🔍 术语解析
+
+**输入**：{用户说法}
+**规范名**：{canonical name}
+
+**已知别名**：
 - {alias 1}
 - {alias 2}
 ```
 
-### Semantic Match
+### 语义匹配
 
 ```
-🔍 Term Resolution
+🔍 术语解析
 
-**Input**: {user term}
-**Not explicitly mapped**
+**输入**：{用户说法}
+**未在显式映射中**
 
-**AI Analysis**:
-- This appears similar to: {canonical name}
-- Reason: {why AI thinks they're similar}
-- Confidence: {percentage}
+**AI 分析**：
+- 与以下功能相似：{canonical name}
+- 理由：{为何相似}
+- 置信度：{百分比}
 
-Is this the same feature?
-[Yes] [No, it's new]
+是同一功能吗？
+[是] [否，这是新功能]
 ```
 
-### No Match
+### 无匹配
 
 ```
-🔍 Term Resolution
+🔍 术语解析
 
-**Input**: {user term}
-**Result**: New feature (no similar features found)
+**输入**：{用户说法}
+**结果**：新功能（未找到相似功能）
 
-Possible related features:
-- {feature 1}: {similarity}
-- {feature 2}: {similarity}
+可能相关功能：
+- {feature 1}：{相似度}
+- {feature 2}：{相似度}
 
-Proceeding as new feature.
+按新功能继续。
 ```
 
-## Auto-Learning Details
+## 自动学习细节
 
-### When to Save
+### 何时保存
 
-Save new mapping when:
-1. User confirms AI's guess
-2. User explicitly says "这是XX功能的别名"
+在以下情况保存新映射：
+1. 用户确认了 AI 的推测
+2. 用户明确说「这是 XX 功能的别名」
 
-### What to Save
+### 保存内容
 
-Update `.dev-pipe/context/rules/term-mappings.md`:
+更新 `.cantrip/context/rules/term-mappings.md`：
 
 ```yaml
 inventory:
   aliases:
     - 背包
     - 背包系统
-    - 道具仓库          # ← Auto-added
+    - 道具仓库          # ← 自动添加
 ```
 
-### Learning Log
+### 学习记录
 
-Keep track of learned terms:
+可保留术语学习记录：
 
 ```markdown
-# Term Learning Log
+# 术语学习记录
 
 ## 2026-02-21
-- "道具仓库" → inventory (user confirmed)
-- "物品管理" → inventory (user confirmed)
+- 「道具仓库」→ inventory（用户确认）
+- 「物品管理」→ inventory（用户确认）
 
 ## 2026-02-20
-- "商城" → shop (user confirmed)
+- 「商城」→ shop（用户确认）
 ```
 
-## Integration Flow
+## 集成流程
 
 ```
-用户: "实现道具仓库"
+用户：「实现道具仓库」
          ↓
-    resolve-term:
-      1. Exact match? No
-      2. Semantic analysis: "inventory" (85%)
-      3. Ask user: Same as 背包系统?
-      4. User: Yes
-      5. Save: "道具仓库" → inventory
+    resolve-term：
+      1. 精确匹配？否
+      2. 语义分析：inventory (85%)
+      3. 询问用户：与背包系统相同？
+      4. 用户：是
+      5. 保存：「道具仓库」→ inventory
          ↓
-    index-feature: 搜索 "inventory"
+    index-feature：按「inventory」检索
          ↓
     找到！背包系统已存在
 ```
 
-## Benefits
+## 好处
 
-1. **不需要预定义所有别名** - AI 能自动判断
-2. **持续学习** - 每次确认都增加知识
-3. **减少重复** - 即使用词不同也能识别
-4. **团队共享** - 学习结果保存到项目中
+1. **无需预定义所有别名** — AI 可自动判断
+2. **持续学习** — 每次确认都积累
+3. **减少重复** — 说法不同也能识别
+4. **团队共享** — 学习结果写入项目

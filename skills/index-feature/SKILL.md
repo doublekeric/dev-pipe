@@ -1,90 +1,90 @@
 ---
 name: index-feature
-description: "Searches implemented features. Activates before starting new tasks to check if similar features already exist. Prevents duplicate implementation."
+description: "检索已实现功能。在新任务开始前激活，检查是否已有类似功能，避免重复实现。"
 ---
 
 # Skill: index-feature
 
-## Purpose
+## 目的
 
-Search and retrieve information about implemented features to prevent duplicate work.
+检索并获取已实现功能的信息，避免重复劳动。
 
-## Trigger
+## 触发条件
 
-- At start of new feature analysis
-- When user describes something to implement
-- phase-router calls this before routing
+- 新功能分析开始时
+- 用户描述要实现的内容时
+- phase-router 在路由前调用
 
-## Search Locations
+## 检索位置
 
 ```
-.dev-pipe/context/
+.cantrip/context/
 ├── features/                    # 已实现功能清单
 │   ├── inventory.md
 │   ├── battle.md
 │   └── shop.md
-└── workspace/archive/           # 归档的任务（可选搜索）
+└── workspace/archive/           # 归档任务（可选检索）
 ```
 
-## Process
+## 流程
 
-### Step 1: Extract Keywords
+### 步骤 1：提取关键词
 
-From task description:
-- System names: inventory, battle, shop
-- Feature names: sorting, pagination, search
+从任务描述中提取：
+- 系统名：inventory, battle, shop
+- 功能名：排序、分页、搜索
 
-### Step 2: Search Features Directory
+### 步骤 2：检索 features 目录
 
-Read `.dev-pipe/context/features/` files.
+读取 `.cantrip/context/features/` 下的文件。
 
-### Step 3: Match Against Feature List
+### 步骤 3：与功能列表匹配
 
-Check if the requested feature already exists.
+检查所请求功能是否已存在。
 
-## Output Format
+## 输出格式
 
-### If Feature Found
+### 功能已存在
 
 ```
-🔍 Feature Found
+🔍 功能已存在
 
-**Feature**: {name}
-**Status**: Implemented
-**Implemented**: {date}
-**Task**: {task-id}
+**功能**：{name}
+**状态**：已实现
+**实现时间**：{date}
+**任务**：{task-id}
 
-**What it does**:
-{brief description}
+**功能说明**：
+{简要描述}
 
-**Files**:
+**相关文件**：
 - {file 1}
 - {file 2}
 
 ---
-This feature already exists. Do you want to:
-[Modify it] [View details] [Start different feature]
+该功能已存在。你可以：
+[修改它] [查看详情] [做别的功能]
 ```
 
-### If Feature Not Found
+### 功能不存在
 
 ```
-🔍 Feature Search
+🔍 功能检索
 
-**Keywords**: {keywords}
-**Result**: No existing feature found
+**关键词**：{keywords}
+**结果**：未找到已有功能
 
-**Similar Features**:
-- {feature 1}: {similarity}
-- {feature 2}: {similarity}
+**相似功能**：
+- {feature 1}：{相似度}
+- {feature 2}：{相似度}
 
 ---
-Proceeding with new feature implementation.
+按新功能继续实现。
 ```
 
-## Feature Document Format
+## 功能文档格式
 
-`.dev-pipe/context/features/{feature-name}.md`:
+`.cantrip/context/features/{feature-name}.md`：
 
 ```markdown
 # Feature: {Name}
@@ -96,26 +96,26 @@ Proceeding with new feature implementation.
 - Category: {system}
 
 ## Description
-{What this feature does}
+{功能说明}
 
 ## Capabilities
-- {Capability 1}
-- {Capability 2}
-- {Capability 3}
+- {能力 1}
+- {能力 2}
+- {能力 3}
 
 ## Files
-- `{file 1}`: {purpose}
-- `{file 2}`: {purpose}
+- `{file 1}`: {用途}
+- `{file 2}`: {用途}
 
 ## Interfaces
-- `{Method 1}()`: {description}
-- `{Method 2}()`: {description}
+- `{Method 1}()`: {说明}
+- `{Method 2}()`: {说明}
 
 ## Related
 - Depends on: {feature}
 - Used by: {feature}
 
 ## History
-- {date}: Initial implementation ({task-id})
-- {date}: Added {capability} ({task-id})
+- {date}: 首次实现 ({task-id})
+- {date}: 新增 {capability} ({task-id})
 ```

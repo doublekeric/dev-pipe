@@ -1,46 +1,46 @@
 ---
 name: change-req
-description: "Modifies existing requirement specification. Activates when user requests changes to requirements or when new information emerges during analysis."
+description: "修改已有需求规格。在用户要求变更需求或分析过程中出现新信息时激活。"
 ---
 
 # Skill: change-req
 
-## Purpose
+## 目的
 
-Modify an existing requirement specification based on user feedback or new information.
+根据用户反馈或新信息修改已有需求规格。
 
-## Trigger
+## 触发条件
 
-- User requests changes to requirements
-- New constraints discovered
-- Scope adjustment needed
+- 用户要求修改需求
+- 发现新约束
+- 需要调整范围
 
-## Input
+## 输入
 
-- Path to existing spec.md
-- Change description
-- Reason for change
+- 现有 spec.md 路径
+- 变更说明
+- 变更原因
 
-## Process
+## 流程
 
-### Step 1: Read Existing Spec
+### 步骤 1：读取现有规格
 
-Load `.dev-pipe/workspace/{task-id}/spec.md`
+加载 `.cantrip/workspace/{task-id}/spec.md`
 
-### Step 2: Apply Changes
+### 步骤 2：应用变更
 
-- Add new requirements
-- Modify existing requirements
-- Remove obsolete requirements
-- Update affected systems list
+- 新增需求
+- 修改已有需求
+- 删除过时需求
+- 更新涉及系统列表
 
-### Step 3: Track Changes
+### 步骤 3：记录变更
 
-Record change history in spec.
+在 spec 中记录变更历史。
 
-## Output
+## 输出
 
-Updated `.dev-pipe/workspace/{task-id}/spec.md`:
+更新后的 `.cantrip/workspace/{task-id}/spec.md`：
 
 ```markdown
 # Requirement Specification: {Feature Name}
@@ -61,19 +61,19 @@ Updated `.dev-pipe/workspace/{task-id}/spec.md`:
 ...
 ```
 
-## Output Format
+## 输出格式
 
 ```
-📝 Requirement Spec Updated
+📝 需求规格已更新
 
-**Changes**:
-- Added: {requirement}
-- Modified: {requirement}
-- Removed: {requirement}
+**变更**:
+- 新增: {requirement}
+- 修改: {requirement}
+- 删除: {requirement}
 
-**Impact**:
-- Affected systems: {list}
-- Design impact: {description}
+**影响**:
+- 涉及系统: {list}
+- 对设计的影响: {description}
 
-Review changes.
+请审阅变更。
 ```

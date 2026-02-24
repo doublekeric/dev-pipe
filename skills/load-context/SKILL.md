@@ -1,57 +1,57 @@
 ---
 name: load-context
-description: "Loads project context for the current task. Reads project overview, system docs, and tech guidelines based on keywords."
+description: "为当前任务加载项目上下文。根据关键词读取项目概览、系统文档与技术规范。"
 ---
 
 # Skill: load-context
 
-## Purpose
+## 目的
 
-Load relevant context files based on task keywords, helping Claude understand the project.
+根据任务关键词加载相关上下文文件，帮助理解项目。
 
-## Trigger
+## 触发条件
 
-- At the start of any task
-- Before analysis or design phases
+- 任意任务开始时
+- 进入分析或设计阶段之前
 
-## Process
+## 流程
 
-### Step 1: Read Project Overview
+### 步骤 1：读取项目概览
 
 ```bash
-# Check if project is initialized
-if [ -f ".dev-pipe/context/project/overview.md" ]; then
-  cat .dev-pipe/context/project/overview.md
+# 检查项目是否已初始化
+if [ -f ".cantrip/context/project/overview.md" ]; then
+  cat .cantrip/context/project/overview.md
 else
-  echo "Project not initialized. Use dev-pipe to initialize first."
+  echo "Project not initialized. Use cantrip to initialize first."
 fi
 ```
 
-### Step 2: Match Keywords to Systems
+### 步骤 2：按关键词匹配系统
 
-Read `.dev-pipe/context/rules/context-rules.md` to find relevant system docs.
+读取 `.cantrip/context/rules/context-rules.md` 找到相关系统文档。
 
-### Step 3: Load System Documentation
+### 步骤 3：加载系统文档
 
-For each matching system, load `.dev-pipe/context/systems/{system}.md`
+对每个匹配的系统，加载 `.cantrip/context/systems/{system}.md`
 
-### Step 4: Load Tech Guidelines
+### 步骤 4：加载技术规范
 
-Load relevant tech guidelines from `.dev-pipe/context/tech/`
+从 `.cantrip/context/tech/` 加载相关技术规范。
 
-## Output
+## 输出
 
 ```
-📚 Context Loaded
+📚 上下文已加载
 
-**Project**: {name}
-**Type**: {project type or one-line description from overview}
+**项目**: {name}
+**类型**: {项目类型或 overview 中的一句话描述}
 
-**Related Systems**:
-- {System A}: {brief summary}
-- {System B}: {brief summary}
+**相关系统**:
+- {System A}: {简要摘要}
+- {System B}: {简要摘要}
 
-**Tech Guidelines**:
+**技术规范**:
 - {Guideline 1}
 - {Guideline 2}
 ```

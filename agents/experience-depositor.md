@@ -1,6 +1,6 @@
 ---
 name: experience-depositor
-description: "Deposits lessons learned. Activates when user runs /remember or when task completes with lessons to save."
+description: "沉淀经验教训。在用户执行 /remember 或任务结束且有教训可保存时激活。"
 context: fork
 skills:
   - index-experience
@@ -8,130 +8,58 @@ skills:
 
 # Agent: experience-depositor
 
-## Responsibility
+## 职责
 
-Structure and save lessons learned to the knowledge base. Update retrieval rules.
+结构化保存经验教训到知识库，并更新检索规则。
 
-## Isolated Context
+## 隔离上下文
 
-This agent runs in an isolated context (context: fork), meaning:
-- It does not share conversation history with the main session
-- It starts fresh, preventing contamination from current task context
-- This ensures clean, focused experience capture
+本 agent 在隔离上下文中运行（context: fork）：
+- 不与主会话共享对话历史
+- 从零开始，避免被当前任务污染
+- 便于专注、干净地收集经验
 
-The `index-experience` skill is preloaded to help find related existing experiences.
+已预加载 `index-experience` 以查找相关已有经验。
 
-## Trigger
+## 触发条件
 
-- User says "remember", "save experience", "record lesson"
-- Task completes with notable lessons
-- User explicitly requests to save experience
+- 用户说「记录」「保存经验」「沉淀教训」
+- 任务结束且有值得保存的教训
+- 用户明确要求保存经验
 
-## Task
+## 任务
 
-- Interactively collect experience details (problem, trigger, cause, solution, prevention)
-- Categorize experience (bug/performance/feature/process)
-- Save structured experience document to knowledge base
-- Update retrieval rules for future discovery
+- 交互式收集经验细节（问题、触发、原因、解决、预防）
+- 分类（bug/performance/feature/process）
+- 将结构化经验文档写入知识库
+- 更新检索规则便于日后发现
 
-## Done When
+## 完成条件
 
-- All required information is collected
-- Experience is saved to `.dev-pipe/context/experience/{category}/{title}.md`
-- Keywords are added to context-rules.md
-- Risk warnings added to risk-rules.md (if applicable)
-- Pattern added to pattern-rules.md (if applicable)
-- User receives confirmation with file location and keywords
+- 必填信息已收集
+- 经验已保存到 `.cantrip/context/experience/{category}/{title}.md`
+- 关键词已写入 context-rules.md
+- 若适用，风险提示已写入 risk-rules.md、模式已写入 pattern-rules.md
+- 用户收到确认及文件路径、关键词说明
 
-## Workflow
+## 流程
 
-### Step 1: Collect Information
+### 步骤 1：收集信息
 
-Interactive collection, ask one question at a time:
+逐项提问：发生了什么、何时触发、根因、如何解决、如何预防、相关系统等。
 
-```
-📝 Experience Deposit
+### 步骤 2：分类
 
-**Brief**: {extracted from input}
+按内容归入 Bug / Performance / Feature / Process，对应目录为 `.cantrip/context/experience/{category}/`。
 
-1. What happened?
-   > 
+### 步骤 3：保存经验
 
-2. What triggered it?
-   > 
+创建 `.cantrip/context/experience/{category}/{title}.md`，包含元数据、问题、触发、根因、解决、预防等。
 
-3. What was the root cause?
-   > 
+### 步骤 4：更新规则
 
-4. How was it resolved?
-   > 
+更新 `.cantrip/context/rules/`：context-rules.md（关键词映射）、risk-rules.md（若适用）、pattern-rules.md（若适用）。
 
-5. How to prevent in future?
-   > 
+## 输出格式
 
-6. Related systems? (comma separated)
-   > 
-```
-
-### Step 2: Categorize
-
-Determine category based on content:
-
-| Category | Location |
-|----------|----------|
-| Bug | `.dev-pipe/context/experience/bug/` |
-| Performance | `.dev-pipe/context/experience/performance/` |
-| Feature | `.dev-pipe/context/experience/feature/` |
-| Process | `.dev-pipe/context/experience/process/` |
-
-### Step 3: Save Experience
-
-Create `.dev-pipe/context/experience/{category}/{title}.md`:
-
-```markdown
-# {Title}
-
-## Metadata
-- Category: {category}
-- Date: {date}
-- Systems: {list}
-- Keywords: {list}
-
-## Problem
-{What happened}
-
-## Trigger
-{When it occurs}
-
-## Root Cause
-{Why it happened}
-
-## Solution
-{How resolved}
-
-## Prevention
-{How to avoid}
-```
-
-### Step 4: Update Rules
-
-Update `.dev-pipe/context/rules/`:
-
-1. **context-rules.md** - Add keyword mapping
-2. **risk-rules.md** - Add risk warning if applicable
-3. **pattern-rules.md** - Add pattern if applicable
-
-## Output Format
-
-```
-✅ Experience Deposited
-
-**File**: .dev-pipe/context/experience/{category}/{title}.md
-**Keywords**: {list}
-
-**Rules Updated**:
-- context-rules.md: Added "{keyword}" mapping
-- risk-rules.md: Added warning for "{keyword}"
-
-This experience will be auto-loaded for similar future tasks.
-```
+输出「经验已沉淀」、文件路径、关键词列表、已更新规则（如 context-rules、risk-rules），并说明该经验将在类似任务中自动加载。

@@ -1,110 +1,95 @@
 ---
 name: implement-design
-description: "Implements code based on technical design. Activates during implementation phase. Generates code step by step with user confirmation."
+description: "按技术设计实现代码。在实现阶段激活，逐步生成代码并等待用户确认。"
 ---
 
 # Skill: implement-design
 
-## Purpose
+## 目的
 
-Implement code based on the approved technical design, one step at a time.
+按已确认的技术设计逐步实现代码。
 
-## Trigger
+## 触发条件
 
-- Invoked by implementation-executor during "implementing" phase
-- Design is confirmed and available
+- 由 implementation-executor 在「implementing」阶段调用
+- 设计已确认且可获取
 
-## Input
+## 输入
 
-- Path to design.md
-- Loaded code style guidelines
-- Retrieved code patterns
+- design.md 路径
+- 已加载的代码风格规范
+- 检索到的代码模式
 
-## Process
+## 流程
 
-### Step 1: Read Design
+### 步骤 1：读取设计
 
-Load `.dev-pipe/workspace/{task-id}/design.md`
+加载 `.cantrip/workspace/{task-id}/design.md`
 
-### Step 2: Read Implementation Plan
+### 步骤 2：读取实现计划
 
-Extract ordered task list from design.
+从设计中提取有序任务列表。
 
-### Step 3: Implement Each Task
+### 步骤 3：逐项实现
 
-For each task:
+对每个任务：
 
-1. **Show task description**
-2. **Generate code**
-3. **Preview code**
-4. **Wait for confirmation**
-5. **Save file**
-6. **Update notes.md**
+1. **展示任务说明**
+2. **生成代码**
+3. **预览代码**
+4. **等待用户确认**
+5. **保存文件**
+6. **更新 notes.md**
 
-### Conventions: Where to Put Scripts
+### 约定：脚本放置位置
 
-When the implementation involves **temporary or one-off scripts** (e.g. codegen `.bat`/`.sh`, generators):
+当实现涉及**临时或一次性脚本**（如 codegen 的 .bat/.sh、生成器）时：
 
-- **Do not** create them under project source (e.g. `Tools/`, `Scripts/`, `client/`). That pollutes the repo and blurs the line between real tooling and temporary artifacts.
-- **Do** create and run them in a **temporary directory**, e.g.:
-  - `{project-root}/.tmp/` (ensure `.tmp/` is in `.gitignore`), or
-  - System temp (`$TMPDIR` / `%TEMP%`).
-- Only add scripts to `Tools/` (or similar) if they are **permanent project tooling** and will be committed and documented.
+- **不要**在项目源码目录下创建（如 `Tools/`、`Scripts/`、`client/`），以免污染仓库、混淆正式工具与临时产物。
+- **应**在**临时目录**中创建并运行，例如：
+  - `{项目根}/.tmp/`（确保 .tmp/ 在 .gitignore 中），或
+  - 系统临时目录（`$TMPDIR` / `%TEMP%`）。
+- 仅当脚本是**长期保留的项目工具**且会被提交和文档化时，才放入 `Tools/` 等目录。
 
-### Step 4: Handle Issues
+### 步骤 4：处理问题
 
-If issues arise:
-- Record in notes.md
-- Offer to modify design
-- Continue or pause
+若出现问题：
+- 在 notes.md 中记录
+- 询问是否修改设计
+- 继续或暂停
 
-## Output Per Task
+## 每项任务输出
 
 ```
-🔨 Task: {Task Description}
+🔨 任务：{任务说明}
 
-**File**: {path}
+**文件**：{path}
 
-**Code**:
+**代码**：
 ```{language}
 {generated code}
 ```
 
 ---
-Confirm this implementation?
-[confirm] [modify] [skip]
+确认此实现？
+[确认] [修改] [跳过]
 ```
 
-## Notes Update
+## notes 更新
 
-`.dev-pipe/workspace/{task-id}/notes.md`:
+`.cantrip/workspace/{task-id}/notes.md` 中记录进度、问题与关键代码片段。
 
-```markdown
-# Implementation Notes
-
-## Progress
-- [x] {Task 1} - {File} - Complete
-- [ ] {Task 2} - {File} - In Progress
-- [ ] {Task 3} - Pending
-
-## Issues
-- {Issue}: {Resolution}
-
-## Code Snippets
-{Key patterns used}
-```
-
-## Final Output
+## 最终输出
 
 ```
-✅ Implementation Complete
+✅ 实现完成
 
-**Tasks Completed**: {n}/{total}
-**Files Modified**: {list}
-**Files Created**: {list}
+**完成任务**：{n}/{total}
+**修改文件**：{list}
+**新增文件**：{list}
 
-**Summary**:
-{Brief description of what was implemented}
+**摘要**：
+{实现内容简要说明}
 
-Proceed to testing?
+是否继续测试？
 ```

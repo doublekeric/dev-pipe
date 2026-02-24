@@ -1,89 +1,70 @@
 ---
 name: change-design
-description: "Modifies existing technical design. Activates when design needs adjustment during implementation or when new constraints emerge."
+description: "修改已有技术设计。在实现过程中需要调整设计或出现新约束时激活。"
 ---
 
 # Skill: change-design
 
-## Purpose
+## 目的
 
-Modify an existing technical design based on implementation feedback or requirement changes.
+根据实现反馈或需求变更修改已有技术设计。
 
-## Trigger
+## 触发条件
 
-- User requests design changes
-- Implementation reveals issues
-- New constraints discovered
+- 用户要求修改设计
+- 实现过程中暴露问题
+- 发现新约束
 
-## Input
+## 输入
 
-- Path to existing design.md
-- Change description
-- Reason for change
+- 现有 design.md 路径
+- 变更说明
+- 变更原因
 
-## Process
+## 流程
 
-### Step 1: Read Existing Design
+### 步骤 1：读取现有设计
 
-Load `.dev-pipe/workspace/{task-id}/design.md`
+加载 `.cantrip/workspace/{task-id}/design.md`
 
-### Step 2: Assess Impact
+### 步骤 2：评估影响
 
-- Which modules affected
-- Which tasks need revision
-- Impact on timeline
+- 哪些模块受影响
+- 哪些任务需要修订
+- 对时间线的影响
 
-### Step 3: Apply Changes
+### 步骤 3：应用变更
 
-Update:
-- Architecture (if needed)
-- Data structures
-- Interfaces
-- Implementation plan
+更新：
+- 架构（如需要）
+- 数据结构
+- 接口
+- 实现计划
 
-### Step 4: Update Risk Assessment
+### 步骤 4：更新风险评估
 
-Re-evaluate risks based on changes.
+根据变更重新评估风险。
 
-## Output
+## 输出
 
-Updated `.dev-pipe/workspace/{task-id}/design.md`:
+更新后的 `.cantrip/workspace/{task-id}/design.md`（含变更历史等）。
 
-```markdown
-# Technical Design: {Feature Name}
-
-> **Last Updated**: {datetime}
-> **Change**: {description}
-
-## Change History
-
-| Date | Change | Impact |
-|------|--------|--------|
-| {date} | {description} | {modules affected} |
-
-## Overview
-...
-
-## Architecture
-...
-```
-
-## Output Format
+## 输出格式
 
 ```
-📐 Design Updated
+📐 设计已更新
 
-**Changes**:
-- Architecture: {change or "none"}
-- Data structures: {change or "none"}
-- Tasks affected: {n}
+**变更**:
+- 架构: {变更或「无」}
+- 数据结构: {变更或「无」}
+- 受影响任务: {n}
 
-**New Risks**:
-- {Risk if any}
+**新增风险**:
+- {如有}
 
-**Implementation Impact**:
-- Tasks to redo: {list}
-- Tasks to add: {list}
+**对实现的影响**:
+- 需重做任务: {list}
+- 需新增任务: {list}
 
-Review changes.
+请审阅变更。
 ```

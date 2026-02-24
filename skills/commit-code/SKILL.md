@@ -1,29 +1,29 @@
 ---
 name: commit-code
-description: "Commits completed code changes. Activates after implementation is verified. Creates commit with proper message and updates task status."
+description: "提交已完成的代码变更。在实现通过验证后激活。生成规范的提交信息并更新任务状态。"
 ---
 
 # Skill: commit-code
 
-## Purpose
+## 目的
 
-Commit completed code changes with proper commit message and update task status.
+用规范的提交信息提交已完成的代码变更，并更新任务状态。
 
-## Trigger
+## 触发条件
 
-- Implementation complete
-- Tests passed (if applicable)
-- User confirms ready to commit
+- 实现已完成
+- 测试通过（如有）
+- 用户确认可以提交
 
-## Process
+## 流程
 
-### Step 1: Review Changes
+### 步骤 1：核对变更
 
-List all modified/created files.
+列出所有已修改/新增的文件。
 
-### Step 2: Generate Commit Message
+### 步骤 2：生成提交信息
 
-Format:
+格式：
 ```
 {type}({scope}): {description}
 
@@ -34,25 +34,25 @@ Changes:
 - {change 2}
 ```
 
-Types: feat, fix, refactor, docs, test, chore
+类型：feat, fix, refactor, docs, test, chore
 
-### Step 3: Execute Commit
+### 步骤 3：执行提交
 
 ```bash
 git add {files}
 git commit -m "{message}"
 ```
 
-### Step 4: Update Task Status
+### 步骤 4：更新任务状态
 
-Update `.dev-pipe/workspace/{task-id}/status.md`:
+更新 `.cantrip/workspace/{task-id}/status.md`：
 - Phase: committed
 - Commit hash: {hash}
 
-## Output
+## 输出
 
 ```
-💾 Code Committed
+💾 代码已提交
 
 **Commit**: {hash}
 **Message**:
@@ -66,26 +66,26 @@ Changes:
 - {change 2}
 ```
 
-**Files**: {n} files
+**Files**: {n} 个文件
 
-Next steps:
-- Push to remote
-- Create pull request
-- Update workspace index
+下一步：
+- 推送到远程
+- 创建 Pull Request
+- 更新工作区索引
 ```
 
-## Commit Message Template
+## 提交信息模板
 
 ```
-{type}({scope}): {short description}
+{type}({scope}): {简短描述}
 
-Detailed description if needed.
+需要时可写详细说明。
 
 Task: {task-id}
 
 Changes:
-- {specific change 1}
-- {specific change 2}
+- {具体变更 1}
+- {具体变更 2}
 
-Related: #{issue if any}
+Related: #{issue 如有}
 ```

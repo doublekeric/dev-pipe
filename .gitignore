@@ -1,7 +1,7 @@
-# DevPipe
+# Cantrip
 
-# DevPipe workspace
-.dev-pipe/workspace/
+# Cantrip workspace
+.cantrip/workspace/
 
 # IDE
 .idea/

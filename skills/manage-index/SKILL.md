@@ -1,101 +1,49 @@
 ---
 name: manage-index
-description: "Manages workspace and context indexes. Activates when indexes need updates. Keeps task lists and context mappings current."
+description: "仅处理索引：任务索引与经验索引的增删改。校验与同步由 maintain-meta 负责。"
 ---
 
 # Skill: manage-index
 
-## Purpose
+## 目的
 
-Maintain and update index files that track tasks and context mappings.
+**只做索引相关**：维护任务索引、经验索引的**增删改**，保持「进行中 / 已完成 / 已归档」等列表与条目正确。  
+索引的校验、与实际目录同步由 **maintain-meta** 负责。
 
-## Trigger
+## 触发条件
 
-- Task created/completed/archived
-- New experience saved
-- Context files added/removed
+- 任务创建/完成/归档
+- 新经验已保存
+- 上下文文件新增或删除
 
-## Indexes Managed
+## 管理的索引
 
-### 1. Task Index
+### 1. 任务索引
 
-`.dev-pipe/workspace/index.md`:
+`.cantrip/workspace/index.md`：包含进行中、已完成、已归档等小节，每项为任务链接与阶段说明。
 
-```markdown
-# Task Index
+### 2. 经验索引（可选）
 
-## In Progress
+`.cantrip/context/experience/INDEX.md`：按 Bug、Performance、Feature、Process 分类列出经验文档。
 
-- [feat-inventory-20260221](./feat-inventory-20260221/) - Inventory system (Phase: implementing)
-- [fix-scroll-20260222](./fix-scroll-20260222/) - Scroll lag (Phase: analyzing)
+## 操作
 
-## Completed
+- **加入任务**：在「进行中」增加一行链接与描述、阶段。
+- **更新阶段**：修改对应任务的 Phase 描述。
+- **移至已完成**：从「进行中」移除，在「已完成」或「已归档」中增加条目。
 
-> Move here when task done
-
-## Archived
-
-> Move here after archival
-```
-
-### 2. Experience Index
-
-`.dev-pipe/context/experience/INDEX.md` (optional):
-
-```markdown
-# Experience Index
-
-## Bug
-- [Quantity Overflow](./bug/quantity-overflow.md) - Inventory quantity exceeded int max
-
-## Performance
-- [Scroll Lag](./performance/scroll-lag.md) - UI scroll caused frame drops
-
-## Feature
-- ...
-
-## Process
-- ...
-```
-
-## Operations
-
-### Add Task to Index
-
-```markdown
-Add to "In Progress":
-- [{task-id}](./{task-id}/) - {description} (Phase: {phase})
-```
-
-### Update Task Phase
-
-```markdown
-Change:
-- [feat-inventory-20260221](./feat-inventory-20260221/) - Inventory system (Phase: implementing)
-To:
-- [feat-inventory-20260221](./feat-inventory-20260221/) - Inventory system (Phase: verifying)
-```
-
-### Move to Completed
-
-```markdown
-Remove from "In Progress"
-Add to "Completed":
-- [feat-inventory-20260221](./archive/...) - Inventory system - Completed 2026-02-21
-```
-
-## Output
+## 输出
 
 ```
-📋 Index Updated
+📋 索引已更新
 
-**Task Index**:
-- Added: {task-id}
-- Updated: {task-id}
-- Removed: {task-id}
+**任务索引**:
+- 新增: {task-id}
+- 更新: {task-id}
+- 移除: {task-id}
 
-**Current State**:
-- In Progress: {n}
-- Completed: {n}
-- Archived: {n}
+**当前状态**:
+- 进行中: {n}
+- 已完成: {n}
+- 已归档: {n}
 ```

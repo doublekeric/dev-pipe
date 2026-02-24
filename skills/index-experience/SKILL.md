@@ -1,30 +1,30 @@
 ---
 name: index-experience
-description: "Retrieves relevant experiences from knowledge base. Activates at the start of every task phase to load related lessons learned and prevent repeat mistakes."
+description: "从知识库检索相关经验。在每个任务阶段开始时激活，加载相关教训，避免重复踩坑。"
 ---
 
 # Skill: index-experience
 
-## Purpose
+## 目的
 
-Search and retrieve relevant experiences from the knowledge base based on task context.
+根据任务上下文，从知识库中检索并返回相关经验。
 
-## Trigger
+## 触发条件
 
-- At start of any task phase (routing, analyzing, designing, implementing)
-- Before making decisions
-- User explicitly requests history
+- 任意任务阶段开始时（路由、分析、设计、实现）
+- 做决策之前
+- 用户明确要求查看历史经验
 
-## Input
+## 输入
 
-- Keywords from task description
-- Current phase context
-- System names involved
+- 任务描述中的关键词
+- 当前阶段上下文
+- 涉及的系统名
 
-## Search Locations
+## 检索位置
 
 ```
-.dev-pipe/context/
+.cantrip/context/
 ├── experience/
 │   ├── bug/
 │   ├── performance/
@@ -36,18 +36,18 @@ Search and retrieve relevant experiences from the knowledge base based on task c
     └── pattern-rules.md
 ```
 
-## Process
+## 流程
 
-### Step 1: Extract Keywords
+### 步骤 1：提取关键词
 
-From task description:
-- System names: inventory, battle, shop
-- Technical terms: ui, network, performance
-- Action verbs: add, fix, optimize
+从任务描述中提取：
+- 系统名：inventory, battle, shop
+- 技术词：ui, network, performance
+- 动作：添加、修复、优化
 
-### Step 2: Match Against Rules
+### 步骤 2：与规则匹配
 
-Read `context/rules/context-rules.md`:
+读取 `context/rules/context-rules.md`：
 
 ```markdown
 inventory, item, bag:
@@ -55,46 +55,46 @@ inventory, item, bag:
   - context/experience/bug/inventory-*.md
 ```
 
-### Step 3: Load Matching Files
+### 步骤 3：加载匹配文件
 
-Read matched files and extract relevant sections.
+读取匹配文件并提取相关段落。
 
-### Step 4: Check Risk Rules
+### 步骤 4：检查风险规则
 
-Read `context/rules/risk-rules.md` for warnings:
+读取 `context/rules/risk-rules.md` 中的提示：
 
 ```markdown
 item, add, quantity:
   - level: high
-  - message: Check for overflow before adding
+  - message: 添加前注意溢出检查
 ```
 
-## Output Format
+## 输出格式
 
 ```
-📚 Experience Index
+📚 经验索引
 
-**Keywords**: {keyword list}
+**关键词**：{关键词列表}
 
-**Related Experiences**:
-1. {Title}
-   > {Summary}
-   Location: context/experience/{path}
+**相关经验**：
+1. {标题}
+   > {摘要}
+   位置：context/experience/{path}
 
-**Risk Warnings**:
-⚠️ [{level}] {warning message}
+**风险提示**：
+⚠️ [{level}] {提示内容}
 
-**Suggested Patterns**:
-✅ {pattern name}: {brief description}
+**建议模式**：
+✅ {模式名}：{简要说明}
 
-**Context to Load**:
+**待加载上下文**：
 - {file path 1}
 - {file path 2}
 ```
 
-## Return Value
+## 返回值
 
-Structured data for calling agent:
+供调用方使用的结构化数据：
 
 ```json
 {

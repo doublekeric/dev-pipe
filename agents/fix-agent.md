@@ -1,150 +1,76 @@
 ---
 name: fix-agent
-description: "Handles bug fixing workflow. Activates when user reports a bug or when task is classified as bug fix. Follows analyze-locate-fix-verify cycle."
+description: "处理 Bug 修复流程。在用户报告 bug 或任务被判定为 bug 修复时激活。遵循分析-定位-修复-验证循环。"
 ---
 
 # Agent: fix-agent
 
-## Responsibility
+## 职责
 
-Manage bug fixing workflow: analyze problem, locate root cause, implement fix, verify, and register experience.
+管理 Bug 修复流程：分析现象、定位根因、实施修复、验证，并登记为经验。
 
-## Trigger
+## 触发条件
 
-- Routed from phase-router for bug fixes
-- User reports a bug
-- Task is in "fixing" phase
+- 由 phase-router 按 bug 修复路由而来
+- 用户报告 bug
+- 任务处于「fixing」阶段
 
-## Task
+## 任务
 
-- Analyze bug symptom and gather information
-- Locate root cause in codebase
-- Propose and implement fix
-- Verify fix works without side effects
-- Commit fix and register as experience
+- 分析 bug 现象并收集信息
+- 在代码库中定位根因
+- 提出并实施修复
+- 验证修复有效且无副作用
+- 提交修复并登记为可检索经验
 
-## Done When
+## 完成条件
 
-- Bug symptom is clearly documented
-- Root cause is identified and documented in status.md
-- Fix is implemented and verified
-- `status.md` shows phase "completed"
-- Code is committed
-- Fix is registered as searchable experience
-- (Optional) Detailed lesson is saved via experience-depositor
+- Bug 现象已清晰记录
+- 根因已识别并写入 status.md
+- 修复已实现并通过验证
+- status.md 阶段为「completed」
+- 代码已提交
+- 修复已登记为可检索经验
+- （可选）通过 experience-depositor 保存详细教训
 
-## Phases
+## 阶段
 
 ```
 new → analyzing → locating → fixing → verifying → completed
 ```
 
-## Workflow
+## 流程
 
-### Phase 1: Analyzing
+### 阶段 1：Analyzing
 
-1. Invoke `resolve-term` (check if bug relates to known feature)
-2. Invoke `index-experience` with bug keywords
-3. Gather information:
-   - What is the symptom?
-   - When does it occur?
-   - What is expected behavior?
-4. Generate hypotheses
-5. Output analysis
+调用 resolve-term、index-experience，收集现象、复现条件、期望行为，形成假设并输出分析。
 
-### Phase 2: Locating
+### 阶段 2：Locating
 
-1. Gather evidence (logs, stack traces)
-2. Read related code
-3. Identify root cause
-4. Output root cause analysis
+收集日志、堆栈等证据，阅读相关代码，确定根因，输出根因分析。
 
-### Phase 3: Fixing
+### 阶段 3：Fixing
 
-1. Generate fix options
-2. User selects approach
-3. Implement fix
-4. Output changes
+给出修复方案，用户选择后实施并输出变更说明。
 
-### Phase 4: Verifying
+### 阶段 4：Verifying
 
-1. Verify fix works
-2. Check for side effects
-3. Invoke `commit-code` skill
-4. Invoke `complete-requirement` (register as experience)
-5. Optionally invoke `experience-depositor` for detailed lesson
+验证修复有效、检查副作用，调用 commit-code、complete-requirement（登记经验），可选调用 experience-depositor 保存详细教训。
 
-## Status File
+## 状态文件
 
-`.dev-pipe/workspace/fix-{id}/status.md`:
+`.cantrip/workspace/fix-{id}/status.md` 记录任务 ID、描述、相关功能、阶段、根因、修复说明等。
 
-```markdown
-# Bug Fix Status
+## 使用的 Skill
 
-- Task ID: fix-{id}
-- Description: {bug description}
-- Related Feature: {canonical name if known}
-- Phase: analyzing | locating | fixing | verifying | completed
-- Created: {datetime}
-- Updated: {datetime}
-
-## Root Cause
-{Filled after locating}
-
-## Fix Applied
-{Filled after fixing}
-```
-
-## Skills Used
-
-| Skill | When |
+| Skill | 时机 |
 |-------|------|
-| resolve-term | At start (relate to known feature) |
-| index-experience | At start of analyzing |
-| implement-design | During fixing |
-| commit-code | After fix verified |
-| complete-requirement | After commit (register experience) |
+| resolve-term | 开始时（关联已知功能） |
+| index-experience | analyzing 开始时 |
+| implement-design | fixing 过程中 |
+| commit-code | 修复验证后 |
+| complete-requirement | 提交后（登记经验） |
 
-## Output Format
+## 输出与移交
 
-### Analysis
-
-```
-🐛 Bug Analysis
-
-**Symptom**: {description}
-**Trigger**: {when it occurs}
-**Related Feature**: {feature name if found}
-
-**Possible Causes**:
-1. {Cause 1} - High
-2. {Cause 2} - Medium
-
-**Related Experience**:
-- {Experience 1}
-
----
-Provide more details or confirm top hypothesis?
-```
-
-### Completion
-
-```
-✅ Bug Fixed
-
-**Root Cause**: {cause}
-**Fix**: {solution}
-**Commit**: {hash}
-
-**Experience Registered**: This fix is now searchable.
-
-Save detailed lesson learned?
-/remember {bug title}
-```
-
-## Handoff
-
-After fix verified and committed:
-
-1. complete-requirement → Register fix as experience
-2. (Optional) experience-depositor → Save detailed lesson
+分析阶段输出现象、触发条件、相关功能、可能原因、相关经验，请用户补充或确认假设。完成后输出根因、修复方案、提交 hash、经验已登记，并提示是否保存详细教训（如 /remember {标题}）。提交后通过 complete-requirement 登记，可选再调用 experience-depositor。

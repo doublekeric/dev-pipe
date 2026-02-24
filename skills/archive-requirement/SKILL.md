@@ -1,72 +1,60 @@
 ---
 name: archive-requirement
-description: "Archives completed requirements. Activates after task is completed and user confirms archival. Moves task files to archive and updates index."
+description: "归档已完成需求。在任务完成且用户确认归档后激活。将任务文件移至归档并更新索引。"
 ---
 
 # Skill: archive-requirement
 
-## Purpose
+## 目的
 
-Archive a completed task, moving it out of the active workspace.
+归档已完成任务，使其离开活跃工作区。
 
-## Trigger
+## 触发条件
 
-- Task completed
-- User confirms archival
-- Cleanup requested
+- 任务已完成
+- 用户确认归档
+- 用户请求清理
 
-## Process
+## 流程
 
-### Step 1: Verify Completion Status
+### 步骤 1：确认完成状态
 
-Read `.dev-pipe/workspace/{task-id}/status.md`:
-- Confirm phase is "completed"
+读取 `.cantrip/workspace/{task-id}/status.md`，确认阶段为「completed」。
 
-### Step 2: Create Archive
+### 步骤 2：创建归档
 
 ```bash
-# Create archive directory
-mkdir -p .dev-pipe/workspace/archive/{YYYY-MM}/
-
-# Move task directory
-mv .dev-pipe/workspace/{task-id}/ .dev-pipe/workspace/archive/{YYYY-MM}/
+mkdir -p .cantrip/workspace/archive/{YYYY-MM}/
+mv .cantrip/workspace/{task-id}/ .cantrip/workspace/archive/{YYYY-MM}/
 ```
 
-### Step 3: Update Index
+### 步骤 3：更新索引
 
-Update `.dev-pipe/workspace/index.md`:
-- Remove from "In Progress"
-- Add to "Archived" with link
+更新 `.cantrip/workspace/index.md`：从「进行中」移除，在「已归档」中增加链接。
 
-### Step 4: Keep Summary
+### 步骤 4：保留摘要（可选）
 
-Optionally keep a summary in main index:
+在索引中保留归档摘要，便于日后查阅。
 
-```markdown
-## Archived
-
-- [feat-inventory-20260221](./archive/2026-02/feat-inventory-20260221/) - Inventory system - Completed 2026-02-21
-```
-
-## Output
+## 输出
 
 ```
-📦 Requirement Archived
+📦 需求已归档
 
-**Task**: {task-id}
-**Archive Location**: .dev-pipe/workspace/archive/{date}/
+**任务**：{task-id}
+**归档位置**：.cantrip/workspace/archive/{date}/
 
-**Workspace Updated**:
-- Active tasks: {n}
-- Archived: {n}
+**工作区已更新**：
+- 进行中任务：{n}
+- 已归档：{n}
 
-Task files preserved in archive for future reference.
+任务文件已保留在归档中供日后参考。
 ```
 
-## Archive Structure
+## 归档结构
 
 ```
-.dev-pipe/workspace/
+.cantrip/workspace/
 ├── archive/
 │   ├── 2026-02/
 │   │   ├── feat-inventory-20260221/

@@ -1,57 +1,54 @@
 ---
 name: create-req
-description: "Creates new requirement specification. Activates when requirement-manager starts analyzing a new feature. Generates structured requirement document."
+description: "创建新需求规格。在 requirement-manager 开始分析新功能时激活，生成结构化需求文档。"
 ---
 
 # Skill: create-req
 
-## Purpose
+## 目的
 
-Generate a structured requirement specification for a new feature.
+为新功能生成结构化的需求规格说明。
 
-## Trigger
+## 触发条件
 
-- Invoked by requirement-manager during "analyzing" phase
+- 由 requirement-manager 在「analyzing」阶段调用
 
-## Input
+## 输入
 
-- Task description
-- Loaded context (project overview, related systems)
-- Retrieved experiences
+- 任务描述
+- 已加载上下文（项目概览、相关系统）
+- 检索到的经验
 
-## Process
+## 流程
 
-### Step 1: Analyze Requirements
+### 步骤 1：分析需求
 
-Break down the task into:
-- Core functionality
-- Edge cases
-- Integration points
-- Constraints
+将任务拆解为：
+- 核心功能
+- 边界情况
+- 集成点
+- 约束
 
-### Step 2: Identify Affected Systems
+### 步骤 2：识别涉及系统
 
-List systems that:
-- Will be modified
-- Will be queried
-- Will be notified
+列出将受影响、被查询或被通知的系统。
 
-### Step 3: Generate Spec Document
+### 步骤 3：生成规格文档
 
-## Output
+## 输出
 
-`.dev-pipe/workspace/{task-id}/spec.md`:
+`.cantrip/workspace/{task-id}/spec.md`：
 
 ```markdown
 # Requirement Specification: {Feature Name}
 
 ## Overview
-{One sentence description}
+{一句话描述}
 
 ## Functional Requirements
 
 ### F1: {Feature Name}
-**Description**: {What it does}
+**Description**: {功能说明}
 **Acceptance Criteria**:
 - [ ] {Criteria 1}
 - [ ] {Criteria 2}
@@ -89,17 +86,17 @@ List systems that:
 - {Experience 2}
 ```
 
-## Output Format
+## 输出格式
 
 ```
-📝 Requirement Spec Created
+📝 需求规格已创建
 
-**File**: .dev-pipe/workspace/{task-id}/spec.md
+**文件**: .cantrip/workspace/{task-id}/spec.md
 
-**Summary**:
-- Functional requirements: {n}
-- Affected systems: {list}
-- Open questions: {n}
+**摘要**:
+- 功能需求：{n} 条
+- 涉及系统：{list}
+- 待澄清问题：{n} 个
 
-Review and confirm to proceed.
+请审阅并确认后继续。
 ```

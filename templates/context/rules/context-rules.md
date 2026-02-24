@@ -101,7 +101,7 @@ test, unit test, integration:
 ## Directory Structure
 
 ```
-.dev-pipe/context/
+.cantrip/context/
 ├── features/              # 已实现的功能（用于检查是否存在）
 │   ├── inventory.md
 │   ├── battle.md

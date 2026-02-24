@@ -1,90 +1,90 @@
 ---
 name: init-project
-description: "Initializes DevPipe for a new project. Activates when /pipe is first used or when .dev-pipe directory doesn't exist."
+description: "为新项目初始化 Cantrip。在首次使用 cantrip 或 .cantrip 目录不存在时激活。"
 ---
 
 # Skill: init-project
 
-## Purpose
+## 目的
 
-Initialize DevPipe structure for a new project, creating knowledge base and workspace.
+为新项目初始化 Cantrip 结构，创建知识库与工作区。
 
-## Trigger
+## 触发条件
 
-- First use of DevPipe in a project
-- `.dev-pipe/` directory doesn't exist
-- User requests project initialization
+- 项目中首次使用 Cantrip
+- `.cantrip/` 目录不存在
+- 用户主动要求初始化项目
 
-## Process
+## 流程
 
-### Step 1: Check Existing Structure
+### 步骤 1：检查现有结构
 
-Check if `.dev-pipe/` exists in the current project.
+检查当前项目下是否已有 `.cantrip/`。
 
-If exists → Offer to reinitialize or update.
+若已存在 → 询问是否重新初始化或更新。
 
-### Step 2: Confirm Initialization
-
-```
-🚀 DevPipe Initialization
-
-DevPipe needs to be set up for this project.
-
-Initialize now? [yes/no]
-```
-
-### Step 2.5: Discover Project Content (Before Asking)
-
-**Before asking any project questions**, scan the project root (and one level of key directories) to see what already exists. Use this to decide *how* to ask, not whether to ask.
-
-**What to look for (examples):**
-
-| If you find… | Likely context | Use for follow-up |
-|--------------|----------------|--------------------|
-| `Assets/`, `ProjectSettings/`, `Packages/`, `*.csproj` | Unity client | Ask project name, confirm "Unity project", optional: game type, target platform, gameplay loop |
-| `Source/`, `*.uproject`, `Content/` | Unreal project | Same idea, confirm Unreal and optionally game type/platform |
-| `go.mod`, `main.go`, `cmd/` | Go backend/service | Ask name, one-line description, confirm "Go service/backend"; skip game-engine questions |
-| `package.json`, `node_modules/` | Node/JS/TS | Ask name, description; optional: frontend vs backend vs tool |
-| `pyproject.toml`, `requirements.txt` | Python project | Ask name, description; optional: app vs script vs service |
-| `pom.xml`, `build.gradle` | Java/JVM | Ask name, description and role of repo |
-| Mixed (e.g. Unity + server folder) | Multi-repo or full-stack | Ask name, then "client / server / both / tool" and tailor next questions |
-| Almost empty or only README | New or placeholder repo | Use **universal questions only** (see below) |
-
-**Rule:** If the project already has clear structure and files, **ask questions that refer to what you found** (e.g. "I see a Unity project here. What's the project name? Is this a game client? If so, what type—e.g. MMO, action, casual—or skip with 'other'?"). If the project is empty or ambiguous, **do not ask game-specific or engine-specific questions**; use the universal set.
-
-### Step 3: Gather Project Information
-
-**When the project has discoverable content:**  
-Ask in order, **based on what you discovered** (confirm or correct):
-
-- Project name (required).
-- Confirm or correct the detected context (e.g. "Unity game client", "Go backend", "Node tool").
-- Only if relevant to the detected context: game type, target platform, engine version, or core loop. Let the user skip or say "other"/"N/A".
-- Optionally: development stage, main tech stack (can be short).
-
-**When the project is empty or you found little:**  
-Use **universal questions only** (no game/engine-specific options):
+### 步骤 2：确认初始化
 
 ```
-📝 Project Setup (universal)
+🚀 Cantrip 初始化
 
-1. Project name?
+需要为本项目配置 Cantrip。
+
+是否现在初始化？[yes/no]
+```
+
+### 步骤 2.5：先发现项目内容（再提问）
+
+**在提问前**，先扫描项目根目录（及一层关键子目录），了解已有内容，再决定**如何提问**，而不是是否提问。
+
+**可参考的发现示例：**
+
+| 若发现… | 可能语境 | 用于后续提问 |
+|---------|----------|--------------|
+| `Assets/`, `ProjectSettings/`, `Packages/`, `*.csproj` | Unity 客户端 | 问项目名、确认「Unity 项目」，可选：游戏类型、目标平台、玩法循环 |
+| `Source/`, `*.uproject`, `Content/` | Unreal 项目 | 同理，确认 Unreal 及可选游戏类型/平台 |
+| `go.mod`, `main.go`, `cmd/` | Go 后端/服务 | 问名称、一句话描述，确认「Go 服务/后端」；跳过游戏引擎相关 |
+| `package.json`, `node_modules/` | Node/JS/TS | 问名称、描述；可选：前端/后端/工具 |
+| `pyproject.toml`, `requirements.txt` | Python 项目 | 问名称、描述；可选：应用/脚本/服务 |
+| `pom.xml`, `build.gradle` | Java/JVM | 问名称、描述及仓库角色 |
+| 混合（如 Unity + server 目录） | 多仓库或全栈 | 问名称，再问「客户端/服务端/两者/工具」并据此细化问题 |
+| 几乎为空或仅有 README | 新仓库或占位 | 仅使用**通用问题**（见下） |
+
+**规则**：若项目已有清晰结构和文件，**提问要结合已发现内容**（如「当前是 Unity 项目，项目名称是？是游戏客户端吗？若是，类型是 MMO/动作/休闲等，或选 other 跳过」）。若项目为空或难以判断，**不要问游戏/引擎专属问题**，改用通用问题集。
+
+### 步骤 3：收集项目信息
+
+**当项目有可发现内容时**  
+按顺序提问，**基于已发现内容**（确认或修正）：
+
+- 项目名称（必填）
+- 确认或修正检测到的语境（如「Unity 游戏客户端」「Go 后端」「Node 工具」）
+- 仅在与语境相关时：游戏类型、目标平台、引擎版本或核心循环，允许用户跳过或填「其他」/「N/A」
+- 可选：开发阶段、主要技术栈（可简短）
+
+**当项目为空或发现很少时**  
+仅使用**通用问题**（不提供游戏/引擎专属选项）：
+
+```
+📝 项目设置（通用）
+
+1. 项目名称？
    > 
 
-2. In one line, what is this project? (e.g. "Unity game client", "Go matchmaking service", "Node CLI tool")
+2. 用一句话描述项目？（如「Unity 游戏客户端」「Go 匹配服务」「Node CLI 工具」）
    > 
 
-3. Main tech or stack? (optional, e.g. "Unity 2022", "Go 1.21", "Node + React")
+3. 主要技术或技术栈？（可选，如「Unity 2022」「Go 1.21」「Node + React」）
    > 
 
-4. Anything else you want DevPipe to know? (optional, or "no")
+4. 还有希望 Cantrip 了解的吗？（可选，或填「无」）
    >
 ```
 
-### Step 4: Create Directory Structure
+### 步骤 4：创建目录结构
 
 ```
-.dev-pipe/
+.cantrip/
 ├── context/
 │   ├── project/
 │   ├── systems/
@@ -98,74 +98,71 @@ Use **universal questions only** (no game/engine-specific options):
 └── workspace/
 ```
 
-### Step 5: Generate Files
+### 步骤 5：生成文件
 
-From templates, generate:
-- `.dev-pipe/context/project/overview.md`
-- `.dev-pipe/context/rules/context-rules.md`
-- `.dev-pipe/context/rules/risk-rules.md`
-- `.dev-pipe/context/rules/pattern-rules.md`
-- `.dev-pipe/workspace/index.md`
+根据模板生成：
+- `.cantrip/context/project/overview.md`
+- `.cantrip/context/rules/context-rules.md`
+- `.cantrip/context/rules/risk-rules.md`
+- `.cantrip/context/rules/pattern-rules.md`
+- `.cantrip/workspace/index.md`
 
-### Step 6: Update .gitignore
+### 步骤 6：更新 .gitignore
 
-Append to .gitignore (if exists):
+若存在 .gitignore，追加：
 
 ```
-# DevPipe
-.dev-pipe/workspace/
+# Cantrip
+.cantrip/workspace/
 
-# Temporary scripts / one-off tools (run from here, not under Tools/ or src/)
+# 临时脚本 / 一次性工具（在此运行，不要放在 Tools/ 或 src/ 下）
 .tmp/
 ```
 
-## Output
+## 输出
 
 ```
-✅ DevPipe Initialized!
+✅ Cantrip 已初始化
 
-📁 Created:
-.dev-pipe/
+📁 已创建：
+.cantrip/
 ├── context/
-│   ├── project/overview.md     ← Edit with your project info
-│   ├── systems/                ← Add system docs here
-│   ├── tech/                   ← Add tech guidelines here
-│   ├── experience/             ← Lessons learned go here
-│   └── rules/                  ← Mapping rules
-└── workspace/                  ← Task state (gitignored)
+│   ├── project/overview.md     ← 在此填写项目信息
+│   ├── systems/                ← 系统文档放这里
+│   ├── tech/                   ← 技术规范放这里
+│   ├── experience/             ← 经验教训放这里
+│   └── rules/                  ← 映射规则
+└── workspace/                  ← 任务状态（已 gitignore）
 
-🎯 Next Steps:
-1. Review: .dev-pipe/context/project/overview.md
-2. Add system docs as you develop
-3. Start: use dev-pipe to implement {your first feature}
+🎯 下一步：
+1. 查看并编辑：.cantrip/context/project/overview.md
+2. 开发过程中补充系统文档
+3. 开始：用 cantrip 实现 {你的第一个功能}
 ```
 
-## Template Files
+## 模板文件
 
-Read templates from either location (try in order):
+从 `.cursor/templates/` 读取模板（由 install-cursor.sh 安装）。
 
-1. `.claude/templates/` — if installed via install-cursor.sh (Cursor)
-2. `templates/` — if running from Claude Code plugin root
+可用模板：
+- `context/project/overview.md` — 项目概览
+- `context/project/structure.md` — 项目结构
+- `context/project/environment.md` — 环境说明
+- `context/tech/tech-guidelines.md` — 技术规范
+- `context/tech/code-style.md` — 代码风格
+- `context/systems/_template.md` — 系统文档
+- `context/features/_template.md` — 功能文档
+- `context/rules/context-rules.md` — 上下文映射规则
+- `context/rules/risk-rules.md` — 风险提示规则
+- `context/rules/pattern-rules.md` — 模式规则
+- `context/rules/term-mappings.md` — 术语映射
+- `context/experience/bug/_template.md` — Bug 经验
+- `context/experience/performance/_template.md` — 性能经验
+- `context/experience/feature/_template.md` — 功能经验
+- `context/experience/process/_template.md` — 流程经验
+- `workspace/index.md` — 工作区索引
+- `workspace/status.md` — 任务状态
 
-Template files available:
-- `context/project/overview.md` — Project overview template
-- `context/project/structure.md` — Project structure template
-- `context/project/environment.md` — Environment setup template
-- `context/tech/tech-guidelines.md` — Technical guidelines template
-- `context/tech/code-style.md` — Code style template
-- `context/systems/_template.md` — System documentation template
-- `context/features/_template.md` — Feature documentation template
-- `context/rules/context-rules.md` — Context mapping rules
-- `context/rules/risk-rules.md` — Risk warning rules
-- `context/rules/pattern-rules.md` — Pattern rules
-- `context/rules/term-mappings.md` — Term mapping rules
-- `context/experience/bug/_template.md` — Bug experience template
-- `context/experience/performance/_template.md` — Performance experience template
-- `context/experience/feature/_template.md` — Feature experience template
-- `context/experience/process/_template.md` — Process experience template
-- `workspace/index.md` — Workspace index template
-- `workspace/status.md` — Task status template
-
-When generating `.dev-pipe/context/project/overview.md`:
-- **Pre-fill** from discovery (e.g. detected "Unity" → set Game Engine; detected "Go" → set Server language) and from user answers.
-- **Omit or collapse** sections that don't apply (e.g. no "Core Gameplay Loop" for a non-game repo; no "Game Engine" for a backend-only repo). The overview template has optional blocks for this.
+生成 `.cantrip/context/project/overview.md` 时：
+- **预填**：根据发现（如检测到 Unity → 填游戏引擎；检测到 Go → 填服务语言）和用户回答。
+- **省略或折叠**不适用小节（如非游戏仓库不要「核心玩法循环」；仅后端不要「游戏引擎」）。概览模板中有可选块。

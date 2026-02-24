@@ -44,6 +44,6 @@
 ---
 
 > More detail:
-> - **Directory structure**: `.dev-pipe/context/project/structure.md`
-> - **Environment**: `.dev-pipe/context/project/environment.md`
-> - **Systems**: `.dev-pipe/context/systems/`
+> - **Directory structure**: `.cantrip/context/project/structure.md`
+> - **Environment**: `.cantrip/context/project/environment.md`
+> - **Systems**: `.cantrip/context/systems/`

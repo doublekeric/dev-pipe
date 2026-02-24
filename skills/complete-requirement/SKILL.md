@@ -1,202 +1,79 @@
 ---
 name: complete-requirement
-description: "Completes and finalizes a requirement. Activates when implementation is done and verified. Updates task status, registers feature and terms, and prepares for archival."
+description: "完成并收尾需求。在实现完成并验证后激活。更新任务状态、注册功能与术语，并准备归档。"
 ---
 
 # Skill: complete-requirement
 
-## Purpose
+## 目的
 
-Finalize a completed requirement, register the feature and its terms to the knowledge base, and prepare for archival.
+收尾已完成的需求，将功能及其术语注册到知识库，并准备归档。
 
-## Trigger
+## 触发条件
 
-- Implementation complete
-- Code committed
-- User confirms task done
+- 实现已完成
+- 代码已提交
+- 用户确认任务完成
 
-## Process
+## 流程
 
-### Step 1: Verify Completion
+### 步骤 1：确认完成
 
-Check:
-- [ ] Implementation complete
-- [ ] Code committed
-- [ ] No critical issues
+检查：
+- [ ] 实现完成
+- [ ] 代码已提交
+- [ ] 无严重问题
 
-### Step 2: Determine Canonical Name
+### 步骤 2：确定规范名
 
-Invoke `resolve-term` to check if this feature already has a canonical name:
+调用 `resolve-term` 检查该功能是否已有规范名；有则沿用并补充新别名，无则新建规范名并登记用户说法为首个别名。
 
-```
-If canonical name exists:
-  - Use existing canonical name
-  - Add new aliases if user used different terms
+### 步骤 3：注册功能
 
-If no canonical name:
-  - Create new canonical name
-  - Register user's term as first alias
-```
+创建 `.cantrip/context/features/{canonical-name}.md`，包含元数据、描述、能力、文件、接口、历史等。
 
-### Step 3: Register Feature
+### 步骤 4：注册术语映射
 
-Create `.dev-pipe/context/features/{canonical-name}.md`:
+更新 `.cantrip/context/rules/term-mappings.md`：向已有条目追加新别名，或新建条目。
 
-```markdown
-# Feature: {Canonical Name}
+### 步骤 5：更新状态
 
-## Metadata
-- Status: Implemented
-- Implemented Date: {date}
-- Task ID: {task-id}
-- Category: {system}
-- Aliases: {user's term}, {other aliases}
+更新 `.cantrip/workspace/{task-id}/status.md`，阶段设为 completed，填写摘要与修改文件等。
 
-## Description
-{What this feature does}
+### 步骤 6：更新工作区索引
 
-## Capabilities
-- {Capability 1}
-- {Capability 2}
+更新 `.cantrip/workspace/index.md`：从「进行中」移至「已完成」。
 
-## Files
-- `{file 1}`: {purpose}
-- `{file 2}`: {purpose}
+### 步骤 7：提示经验沉淀
 
-## Interfaces
-- `{Method}()`: {description}
+询问用户是否有需要保存的教训。
 
-## History
-- {date}: Initial implementation ({task-id})
-```
-
-### Step 4: Register Term Mappings
-
-Update `.dev-pipe/context/rules/term-mappings.md`:
-
-Add new aliases to existing entry:
-
-```yaml
-inventory:
-  aliases:
-    - 背包
-    - 背包系统
-    - 道具仓库          # ← 新增
-    - inventory
-```
-
-Or create new entry:
-
-```yaml
-{canonical-name}:
-  aliases:
-    - {user's original term}
-    - {suggested aliases}
-  category: {system}
-  description: {brief}
-```
-
-### Step 5: Update Status
-
-Update `.dev-pipe/workspace/{task-id}/status.md`:
-
-```markdown
-# Task Status
-
-- Task ID: {id}
-- Description: {description}
-- Type: feature
-- Phase: completed
-- Created: {datetime}
-- Completed: {datetime}
-
-## Summary
-
-{What was implemented}
-
-## Files Modified
-
-- {file 1}
-- {file 2}
-
-## Registration
-
-✅ Feature: .dev-pipe/context/features/{canonical-name}.md
-✅ Terms: Added "{user's term}" → "{canonical-name}"
-```
-
-### Step 6: Update Workspace Index
-
-Update `.dev-pipe/workspace/index.md`:
-- Move from "In Progress" to "Completed"
-
-### Step 7: Prompt Experience Deposit
-
-Ask user if any lessons should be saved.
-
-## Output
+## 输出
 
 ```
-✅ Requirement Completed
+✅ 需求已完成
 
-**Task**: {task-id}
-**Status**: Completed
+**任务**：{task-id}
+**状态**：已完成
 
-**Feature Registered**:
-📄 .dev-pipe/context/features/{canonical-name}.md
+**功能已注册**：
+📄 .cantrip/context/features/{canonical-name}.md
 
-**Term Mappings**:
-📝 "{user's term}" → "{canonical-name}"
-   Known aliases: 背包, 背包系统, 道具仓库, inventory...
+**术语映射**：
+📝 "{用户说法}" → "{canonical-name}"
+   已知别名：背包, 背包系统, 道具仓库, inventory...
 
-**Summary**:
-{What was implemented}
+**摘要**：
+{实现内容}
 
-**Files**: {n} files
-**Commits**: {n} commits
+**文件**：{n} 个
+**提交**：{n} 次
 
-**Next Steps**:
-1. Save lessons learned? /remember {topic}
-2. Archive task?
+**下一步**：
+1. 保存经验？/remember {主题}
+2. 归档任务？
 ```
 
-## Term Registration Details
+## 术语注册说明
 
-### Why Register Terms?
-
-确保不同角色用不同词汇描述时，都能找到同一功能：
-
-| 场景 | 不注册术语 | 注册术语后 |
-|------|-----------|-----------|
-| 产品说"背包系统" | 注册为 "背包系统" | 注册为 inventory |
-| 运营说"道具仓库" | 找不到，重复开发 | 找到 inventory，提示已存在 |
-| 研发说"Inventory" | 找不到，重复开发 | 找到 inventory，提示已存在 |
-
-### Term Collection
-
-When registering, collect all known terms:
-
-1. **User's original term**: What user called it
-2. **Code names**: Class names, folder names
-3. **Ask**: "其他团队怎么叫这个功能？"
-
-```
-📝 Term Registration
-
-Your feature is called: "背包系统"
-
-What other names might people use?
-1. 产品团队怎么叫？
-2. 运营团队怎么叫？
-3. 代码里叫什么？
-
-> 道具仓库
-> 物品管理
-> InventoryManager
-
-Added 4 aliases:
-- 背包系统
-- 道具仓库
-- 物品管理
-- InventoryManager
-```
+注册术语后，不同角色用不同说法时都能指向同一功能（如产品说「背包系统」、运营说「道具仓库」、研发说「Inventory」均映射到 inventory，避免重复开发）。注册时可收集：用户原始说法、代码中的类名/目录名，并询问「其他团队怎么叫这个功能？」。
