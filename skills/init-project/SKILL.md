@@ -1,6 +1,6 @@
 ---
 name: init-project
-description: "为新项目初始化 Cantrip。在首次使用 cantrip 或 .cantrip 目录不存在时激活。"
+description: "为新项目初始化 Cantrip。在首次使用 cantrip 或 .cantrip 目录不存在时激活。必须先向用户提问并收集回答，再创建/生成任何文件。"
 ---
 
 # Skill: init-project
@@ -14,6 +14,14 @@ description: "为新项目初始化 Cantrip。在首次使用 cantrip 或 .cantr
 - 项目中首次使用 Cantrip
 - `.cantrip/` 目录不存在
 - 用户主动要求初始化项目
+
+## ⚠️ 必须遵守（禁止跳过）
+
+**在未完成「步骤 2 确认 + 步骤 2.5 发现 + 步骤 3 向用户提问并收集回答」之前，不得创建 `.cantrip/` 目录下的任何文件或写入 overview.md、rules 等。**
+
+- 禁止在未询问用户的情况下直接生成 `overview.md`、`context-rules.md` 等。
+- 必须先与用户进行至少一轮问答（项目名称、项目描述等），根据用户回答再执行步骤 4、5 生成目录和文件。
+- 若用户尚未回复你的提问，就等待用户回复，不要用猜测或占位内容提前生成文件。
 
 ## 流程
 
@@ -54,6 +62,8 @@ description: "为新项目初始化 Cantrip。在首次使用 cantrip 或 .cantr
 
 ### 步骤 3：收集项目信息
 
+**必须逐项向用户提问，在获得用户回答后再进入步骤 4、5；不得跳过提问直接生成文件。**
+
 **当项目有可发现内容时**  
 按顺序提问，**基于已发现内容**（确认或修正）：
 
@@ -83,6 +93,8 @@ description: "为新项目初始化 Cantrip。在首次使用 cantrip 或 .cantr
 
 ### 步骤 4：创建目录结构
 
+**仅在步骤 3 已收集到用户回答后执行。**
+
 ```
 .cantrip/
 ├── context/
@@ -100,7 +112,7 @@ description: "为新项目初始化 Cantrip。在首次使用 cantrip 或 .cantr
 
 ### 步骤 5：生成文件
 
-根据模板生成：
+**仅在步骤 3 已收集到用户回答后执行。** 根据用户回答与发现的项目内容生成，不要用空模板或占位内容敷衍。
 - `.cantrip/context/project/overview.md`
 - `.cantrip/context/rules/context-rules.md`
 - `.cantrip/context/rules/risk-rules.md`

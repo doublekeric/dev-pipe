@@ -25,6 +25,8 @@ Cantrip 是管理需求、技术设计、代码实现、Bug 修复与经验沉�
 
 检查 `.cantrip/` 与 `.cantrip/context/project/overview.md` 是否存在；若缺失则调用 **init-project** 并等待完成。
 
+**调用 init-project 时**：init-project 必须先向用户提问（项目名称、描述等）并收集回答，再创建任何文件；不得在未询问用户的情况下直接生成文档。
+
 ### 步骤 1：解析术语
 
 调用 **resolve-term**：将用户说法转为规范名，供后续 index-feature 使用。查 `.cantrip/context/rules/term-mappings.md` 获取已有映射。
